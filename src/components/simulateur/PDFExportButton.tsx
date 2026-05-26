@@ -5,7 +5,7 @@ import { TAUX_PAR_ANNEE } from '../../lib/constants';
 import type { AnneeFiscale } from '../../lib/constants';
 
 // ✅ COLLE TON LIEN STRIPE ICI après l'avoir créé dans le Dashboard
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/REMPLACE_PAR_TON_LIEN';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_fZubJ15rA9kmc9Aa7f9R600';
 
 const STORAGE_KEY = 'cjg_pending_pdf';
 
@@ -460,7 +460,13 @@ export default function PDFExportButton({ resultats, comparatif, secteur }: Prop
     }
   }, [autoDownloaded]);
 
+  const isStripeConfigured = STRIPE_PAYMENT_LINK !== 'https://buy.stripe.com/test_fZubJ15rA9kmc9Aa7f9R600';
+
   const handlePay = () => {
+    if (!isStripeConfigured) {
+      alert('Paiement non disponible pour le moment. Revenez bientôt !');
+      return;
+    }
     const pending: PendingPDF = { resultats, comparatif, secteur };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
     window.location.href = STRIPE_PAYMENT_LINK;
@@ -500,9 +506,9 @@ export default function PDFExportButton({ resultats, comparatif, secteur }: Prop
               <button
                 onClick={handlePay}
                 className="flex-1 font-titre font-bold text-white rounded-xl py-3 transition-all hover:opacity-90"
-                style={{ background: '#FF6B35' }}
+                style={{ background: isStripeConfigured ? '#FF6B35' : '#9CA3AF' }}
               >
-                Payer 4,90 € →
+                {isStripeConfigured ? 'Payer 4,90 € →' : 'Bientôt disponible'}
               </button>
               <button
                 onClick={() => setModalOpen(false)}

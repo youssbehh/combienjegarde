@@ -31,12 +31,32 @@ export default function Footer() {
 
         {/* Col 3 */}
         <div>
-          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">Articles populaires</h3>
+          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">Articles récents</h3>
           <ul className="flex flex-col gap-2">
-            <li><Link to="/guide/cotisations-urssaf-ae" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">Cotisations URSSAF 2025</Link></li>
-            <li><Link to="/guide/impot-auto-entrepreneur" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">Impôts auto-entrepreneur</Link></li>
-            <li><Link to="/guide/tva-auto-entrepreneur" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">TVA et franchise</Link></li>
-            <li><Link to="/guide/prelevement-liberatoire" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">Prélèvement libératoire</Link></li>
+            <li>
+              <Link to="/guide/changements-2026" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(46,196,182,0.25)', color: '#2EC4B6' }}>2026</span>
+                Changements auto-entrepreneur 2026
+              </Link>
+            </li>
+            <li>
+              <Link to="/guide/e-facturation-auto-entrepreneur" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FF6B35' }}>Nouveau</span>
+                E-facturation auto-entrepreneur
+              </Link>
+            </li>
+            <li>
+              <Link to="/guide/cotisations-urssaf-2026" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(46,196,182,0.25)', color: '#2EC4B6' }}>2026</span>
+                Cotisations URSSAF 2026
+              </Link>
+            </li>
+            <li>
+              <Link to="/guide/e-facturation-generale" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FF6B35' }}>Nouveau</span>
+                Réforme e-facturation 2026-2027
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -71,7 +91,7 @@ export default function Footer() {
       <div className="border-t border-blue-800">
         <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-2">
           <p className="font-corps text-xs text-blue-300">
-            © 2025 CombienJeGarde.fr — Données basées sur les taux officiels 2025, à titre indicatif uniquement.
+            © 2026 CombienJeGarde.fr — Données basées sur les taux officiels 2025 & 2026, à titre indicatif uniquement.
           </p>
           <div className="flex gap-4">
             <Link to="/mentions-legales" className="font-corps text-xs text-blue-300 hover:text-white transition-colors">Mentions légales</Link>
