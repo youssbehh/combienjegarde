@@ -4,3 +4,5 @@ dist
 .env.local
 .DS_Store
 *.log
+prompt-claude-code-combienjegarde.md
+.claude
