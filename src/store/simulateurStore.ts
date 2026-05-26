@@ -11,6 +11,7 @@ interface SimulateurState {
   revenuFiscalRef: number;
   nbParts: number;
   annee: AnneeFiscale;
+  acre: boolean;
   step: 1 | 2 | 3;
   resultats: ResultatSimulation | null;
   comparatif: ResultatComparatif | null;
@@ -20,11 +21,10 @@ interface SimulateurState {
   setRevenuFiscalRef: (v: number) => void;
   setNbParts: (v: number) => void;
   setAnnee: (a: AnneeFiscale) => void;
+  setAcre: (v: boolean) => void;
   setStep: (s: 1 | 2 | 3) => void;
   calculer: () => void;
-  // reset complet — revient à l'étape 1 en conservant les inputs
   recommencer: () => void;
-  // reset total — remet tout par défaut
   reset: () => void;
 }
 
@@ -35,6 +35,7 @@ const defaultInputs = {
   revenuFiscalRef: 0,
   nbParts: 1,
   annee: 2026 as AnneeFiscale,
+  acre: false,
 };
 
 const defaultState = {
@@ -54,10 +55,11 @@ export const useSimulateurStore = create<SimulateurState>()(
       setRevenuFiscalRef: (revenuFiscalRef) => set({ revenuFiscalRef }),
       setNbParts: (nbParts) => set({ nbParts }),
       setAnnee: (annee) => set({ annee }),
+      setAcre: (acre) => set({ acre }),
       setStep: (step) => set({ step }),
       calculer: () => {
-        const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee } = get();
-        const params = { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee };
+        const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee, acre } = get();
+        const params = { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee, acre };
         set({
           resultats: calculerRevenuNet(params),
           comparatif: calculerComparatif(params),
@@ -76,6 +78,7 @@ export const useSimulateurStore = create<SimulateurState>()(
         revenuFiscalRef: state.revenuFiscalRef,
         nbParts: state.nbParts,
         annee: state.annee,
+        acre: state.acre,
       }),
     }
   )

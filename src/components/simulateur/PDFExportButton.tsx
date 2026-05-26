@@ -24,10 +24,18 @@ interface Props {
 const secteurLabels: Record<Secteur, string> = {
   bic_vente: 'BIC Vente (Commerce / Artisanat)',
   bic_services: 'BIC Services (Conseil / Prestation)',
-  bnc: 'BNC (Profession libérale / Freelance)',
+  bnc: 'BNC (Profession libérale / Freelance — SSI)',
+  bnc_cipav: 'BNC (Profession réglementée — CIPAV)',
 };
 
 const conseils: Record<Secteur, string[]> = {
+  bnc_cipav: [
+    "Vos cotisations CIPAV (24,7% en 2026) couvrent votre retraite de base et complémentaire CIPAV — vérifiez votre relevé de points chaque année.",
+    "Provisionnez 30-35% de chaque encaissement pour charges sociales et fiscales.",
+    "Surveillez votre seuil TVA annuel (37 500 €) : le dépassement impose la TVA dès le 1er jour du mois concerné.",
+    "Optez pour le prélèvement libératoire si votre TMI est inférieur à 15%.",
+    "Consultez un expert-comptable dès 40 000 €/an pour optimiser votre structure.",
+  ],
   bnc: [
     "Optez pour le prélèvement libératoire si votre TMI est inférieur à 15% : vous payez un taux fixe (2,2%) plutôt que le barème progressif.",
     "Provisionnez 28-32% de chaque encaissement pour vos charges sociales et fiscales afin d'éviter les mauvaises surprises.",
@@ -52,6 +60,13 @@ const conseils: Record<Secteur, string[]> = {
 };
 
 const planAction: Record<Secteur, string[]> = {
+  bnc_cipav: [
+    "📅 Déclarez votre CA URSSAF avant le 31 janvier (trimestriel) ou mensuellement",
+    "💰 Ouvrez un compte bancaire dédié et provisionnez 32% de chaque encaissement",
+    "📄 E-facturation obligatoire à partir de 2027 pour les factures B2B",
+    "📊 Vérifiez votre relevé de points CIPAV chaque année sur cipav.fr",
+    "🔍 Vérifiez si l'ACRE vous est applicable à la création — cotisations −50% la 1ère année",
+  ],
   bnc: [
     "📅 Déclarez votre CA URSSAF avant le 31 janvier (trimestriel) ou le 31 de chaque mois (mensuel)",
     "💰 Ouvrez un compte bancaire dédié à votre activité pour suivre facilement vos flux",

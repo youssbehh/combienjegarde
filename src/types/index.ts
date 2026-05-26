@@ -9,6 +9,7 @@ export interface ParamsSimulation {
   revenuFiscalRef: number;
   nbParts: number;
   annee: AnneeFiscale;
+  acre?: boolean;
 }
 
 export interface ResultatSimulation {
@@ -19,6 +20,7 @@ export interface ResultatSimulation {
   revenuNet: number;
   tauxPrelevement: number;
   annee: AnneeFiscale;
+  acreApplique?: boolean;
   detail: {
     cotisations: number;
     impot: number;

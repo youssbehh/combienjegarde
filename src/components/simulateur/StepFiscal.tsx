@@ -36,9 +36,9 @@ function Tooltip({ text }: { text: string }) {
 
 export default function StepFiscal() {
   const {
-    prelevementLiberatoire, revenuFiscalRef, nbParts,
+    prelevementLiberatoire, revenuFiscalRef, nbParts, acre,
     setPrelevementLiberatoire, setRevenuFiscalRef, setNbParts,
-    setStep, calculer,
+    setAcre, setStep, calculer,
   } = useSimulateurStore();
 
   const partsOptions = [1, 1.5, 2, 2.5, 3];
@@ -53,6 +53,33 @@ export default function StepFiscal() {
   return (
     <div className="animate-fadeInUp">
       <h2 className="font-titre font-bold text-2xl text-bleu-marine mb-6">Votre situation fiscale</h2>
+
+      {/* ACRE toggle */}
+      <div className="mb-6 p-5 rounded-card bg-white shadow-card">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <span className="font-titre font-semibold text-gris-fonce">Bénéficiez de l'ACRE ?</span>
+            <Tooltip text="L'ACRE (Aide à la Création ou Reprise d'Entreprise) réduit vos cotisations de 50% pendant la 1ère année et exonère la CFE. Demande à faire à la création." />
+          </div>
+          <button
+            onClick={() => setAcre(!acre)}
+            className="relative w-12 h-6 rounded-full transition-colors duration-200"
+            style={{ background: acre ? '#2EC4B6' : '#E9ECEF' }}
+            aria-checked={acre}
+            role="switch"
+          >
+            <span
+              className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
+              style={{ transform: acre ? 'translateX(24px)' : 'translateX(0)' }}
+            />
+          </button>
+        </div>
+        {acre && (
+          <p className="mt-2 text-xs font-corps leading-relaxed" style={{ color: '#1A9E92' }}>
+            Cotisations réduites de <strong>50%</strong> + CFE exonérée pour votre 1ère année d'activité.
+          </p>
+        )}
+      </div>
 
       {/* Prélèvement libératoire toggle */}
       <div className="mb-8 p-5 rounded-card bg-white shadow-card">

@@ -21,10 +21,11 @@ function calculerIRBareme(
 }
 
 export function calculerRevenuNet(params: ParamsSimulation): ResultatSimulation {
-  const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee } = params;
+  const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee, acre } = params;
   const taux = TAUX_PAR_ANNEE[annee];
 
-  const cotisationsURSSAF = Math.round(ca * taux.cotisations[secteur]);
+  let cotisationsURSSAF = Math.round(ca * taux.cotisations[secteur]);
+  if (acre) cotisationsURSSAF = Math.round(cotisationsURSSAF * 0.5);
 
   let impotEstime: number;
   if (prelevementLiberatoire) {
@@ -37,7 +38,8 @@ export function calculerRevenuNet(params: ParamsSimulation): ResultatSimulation 
     impotEstime = calculerIRBareme(revenuGlobal, nbParts, taux.bareme_ir);
   }
 
-  const cfeEstimee = taux.cfe_mensuelle;
+  // ACRE : exonération CFE la 1ère année
+  const cfeEstimee = acre ? 0 : taux.cfe_mensuelle;
   const revenuNet = Math.max(0, ca - cotisationsURSSAF - impotEstime - cfeEstimee);
   const tauxPrelevement = ca > 0
     ? Math.round(((cotisationsURSSAF + impotEstime + cfeEstimee) / ca) * 1000) / 10
@@ -51,6 +53,7 @@ export function calculerRevenuNet(params: ParamsSimulation): ResultatSimulation 
     revenuNet,
     tauxPrelevement,
     annee,
+    acreApplique: !!acre,
     detail: {
       cotisations: cotisationsURSSAF,
       impot: impotEstime,
