@@ -118,26 +118,197 @@ const articleContent: Record<string, React.ReactNode> = {
       <p>Le prélèvement libératoire de l'impôt sur le revenu (PLIR) vous permet de payer votre impôt en même temps que vos cotisations URSSAF, sous forme d'un pourcentage fixe de votre CA. Il "libère" définitivement de l'impôt sur ces revenus.</p>
 
       <h2 className="font-titre font-bold text-bleu-marine text-2xl">Tableau comparatif : 3 exemples chiffrés</h2>
-
       <div className="p-5 rounded-xl bg-blanc-casse text-sm space-y-4">
         <h3 className="font-titre font-semibold text-bleu-marine">Exemple 1 : CA 2 000€/mois BNC, 1 part, faibles revenus annexes</h3>
         <p>Prélèvement libératoire : 2 000 × 2,2% = <strong className="text-vert-menthe">44 €/mois</strong></p>
         <p>Barème (revenu imposable 15 840€/an) : ≈ <strong className="text-jaune-impot">50 €/mois</strong></p>
         <p>→ PL légèrement avantageux dans ce cas.</p>
       </div>
-
       <div className="p-5 rounded-xl bg-blanc-casse text-sm space-y-4">
         <h3 className="font-titre font-semibold text-bleu-marine">Exemple 2 : CA 2 000€/mois BNC, 2 parts</h3>
         <p>Prélèvement libératoire : <strong className="text-jaune-impot">44 €/mois</strong></p>
-        <p>Barème avec 2 parts (impôt divisé) : ≈ <strong className="text-vert-menthe">20 €/mois</strong></p>
+        <p>Barème avec 2 parts : ≈ <strong className="text-vert-menthe">20 €/mois</strong></p>
         <p>→ Le barème progressif est plus intéressant avec 2 parts.</p>
       </div>
-
       <h2 className="font-titre font-bold text-bleu-marine text-2xl">Conditions d'éligibilité</h2>
-      <p>Votre revenu fiscal de référence (RFR) de l'année N-2 ne doit pas dépasser <strong>27 794 € par part</strong> de quotient familial.</p>
-
+      <p>Votre RFR N-2 ne doit pas dépasser <strong>27 794 €/part en 2025</strong> (28 797 €/part en 2026).</p>
       <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
         <strong>Source :</strong> <a href="https://www.impots.gouv.fr/professionnel/le-versement-liberatoire-de-limpot-sur-le-revenu" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr — Versement libératoire</a>
+      </div>
+    </div>
+  ),
+
+  'changements-2026': (
+    <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Hausse des cotisations BNC : +1,5 point</h2>
+      <p>La principale nouveauté 2026 concerne les <strong>BNC (professions libérales non réglementées)</strong>. Dans le cadre de la réforme des retraites des professions libérales, les cotisations URSSAF passent de <strong>23,1% à 24,6%</strong> du CA.</p>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Secteur</th><th className="p-3 text-right">2025</th><th className="p-3 text-right">2026</th><th className="p-3 text-right">Évolution</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-gris-clair"><td className="p-3">BIC Vente</td><td className="p-3 text-right">12,3%</td><td className="p-3 text-right">12,3%</td><td className="p-3 text-right text-gris-moyen">→ inchangé</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">BIC Services</td><td className="p-3 text-right">21,2%</td><td className="p-3 text-right">21,2%</td><td className="p-3 text-right text-gris-moyen">→ inchangé</td></tr>
+            <tr className="border-b border-gris-clair"><td className="p-3 font-semibold">BNC / Libéral</td><td className="p-3 text-right">23,1%</td><td className="p-3 text-right font-bold text-rouge-charges">24,6%</td><td className="p-3 text-right text-rouge-charges font-bold">+1,5 pt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3E0', border: '1px solid #FF9F1C' }}>
+        <strong>Impact concret :</strong> Pour un BNC à 3 000€/mois, la hausse représente <strong>45€/mois</strong> de cotisations supplémentaires, soit 540€/an.
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Barème IR 2026 : revalorisation +1,8%</h2>
+      <p>Les tranches du barème progressif de l'impôt sur le revenu sont revalorisées de +1,8% pour tenir compte de l'inflation.</p>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Tranche</th><th className="p-3 text-right">Taux</th><th className="p-3 text-right">Seuil 2025</th><th className="p-3 text-right">Seuil 2026</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-gris-clair"><td className="p-3">Tranche 0</td><td className="p-3 text-right text-vert-menthe font-bold">0%</td><td className="p-3 text-right">11 294 €</td><td className="p-3 text-right font-bold">11 497 €</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">Tranche 1</td><td className="p-3 text-right">11%</td><td className="p-3 text-right">28 797 €</td><td className="p-3 text-right font-bold">29 315 €</td></tr>
+            <tr className="border-b border-gris-clair"><td className="p-3">Tranche 2</td><td className="p-3 text-right text-jaune-impot">30%</td><td className="p-3 text-right">82 341 €</td><td className="p-3 text-right font-bold">83 823 €</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">Tranche 3</td><td className="p-3 text-right text-rouge-charges">41%</td><td className="p-3 text-right">177 106 €</td><td className="p-3 text-right font-bold">180 294 €</td></tr>
+            <tr><td className="p-3">Tranche 4</td><td className="p-3 text-right text-rouge-charges">45%</td><td className="p-3 text-right">∞</td><td className="p-3 text-right">∞</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">E-facturation : les grandes entreprises démarrent en 2026</h2>
+      <p>Les grandes entreprises et ETI ont l'obligation d'émettre des factures électroniques à partir de <strong>2026</strong>. Pour les auto-entrepreneurs, l'obligation arrive en <strong>2027</strong> — mais il faut se préparer maintenant.</p>
+      <div className="p-4 rounded-xl text-sm" style={{ background: 'rgba(46,196,182,0.08)', border: '1px solid rgba(46,196,182,0.3)' }}>
+        <p>→ <strong>Lire notre guide complet :</strong> <a href="/guide/e-facturation-auto-entrepreneur" className="text-bleu-marine underline">E-facturation pour auto-entrepreneur 2027</a></p>
+      </div>
+    </div>
+  ),
+
+  'cotisations-urssaf-2026': (
+    <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Pourquoi les cotisations BNC augmentent en 2026 ?</h2>
+      <p>La réforme des retraites des professions libérales prévoit une <strong>montée en charge progressive</strong> des cotisations retraite pour les non-réglementés (anciennement SSI, maintenant CIPAV pour certains). En 2026, cette hausse se traduit par +1,5 point sur les cotisations globales BNC.</p>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Nouveaux taux 2026</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Secteur</th><th className="p-3 text-right">Taux 2026</th><th className="p-3 text-right">Exemple 3 000€/mois</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-gris-clair"><td className="p-3">BIC Vente</td><td className="p-3 text-right font-bold">12,3%</td><td className="p-3 text-right text-rouge-charges">369 €</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">BIC Services</td><td className="p-3 text-right font-bold">21,2%</td><td className="p-3 text-right text-rouge-charges">636 €</td></tr>
+            <tr><td className="p-3 font-semibold">BNC / Libéral</td><td className="p-3 text-right font-bold text-rouge-charges">24,6%</td><td className="p-3 text-right text-rouge-charges font-bold">738 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">L'ACRE reste applicable en 2026</h2>
+      <p>Si vous créez votre activité en 2026, vous pouvez bénéficier de l'<strong>ACRE (Aide à la Création ou Reprise d'Entreprise)</strong> : réduction de 50% sur vos cotisations pendant la 1ère année. La demande se fait lors de la création via le site de l'URSSAF.</p>
+
+      <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
+        <strong>Source :</strong> <a href="https://www.autoentrepreneur.urssaf.fr" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">autoentrepreneur.urssaf.fr</a> — Taux applicables 2026
+      </div>
+    </div>
+  ),
+
+  'e-facturation-auto-entrepreneur': (
+    <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Qu'est-ce que l'e-facturation obligatoire ?</h2>
+      <p>L'e-facturation (ou facturation électronique structurée) est l'obligation d'émettre et de recevoir des factures dans un <strong>format numérique normalisé</strong> transmis via une plateforme agréée par l'État. Ce n'est pas un simple PDF envoyé par email — c'est une facture que les systèmes informatiques peuvent lire automatiquement.</p>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Calendrier : quand serez-vous concerné ?</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Date</th><th className="p-3 text-left">Qui est concerné ?</th><th className="p-3 text-left">Obligation</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-gris-clair"><td className="p-3 font-bold">2026</td><td className="p-3">Grandes entreprises et ETI</td><td className="p-3">Émettre des e-factures</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3 font-bold text-rouge-charges">2027</td><td className="p-3">PME, micro-entreprises, auto-entrepreneurs</td><td className="p-3 font-bold">Émettre ET recevoir</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Les formats de factures acceptés</h2>
+      <ul className="space-y-3">
+        <li className="p-4 rounded-xl bg-blanc-casse"><strong>Factur-X</strong> — Le plus simple pour les auto-entrepreneurs. C'est un PDF standard avec des données XML intégrées invisibles. Vos clients voient un beau PDF, les systèmes lisent les données automatiquement.</li>
+        <li className="p-4 rounded-xl bg-blanc-casse"><strong>UBL (Universal Business Language)</strong> — Format XML international, surtout utilisé dans les grands groupes et les échanges européens.</li>
+        <li className="p-4 rounded-xl bg-blanc-casse"><strong>CII (Cross Industry Invoice)</strong> — Standard UN/CEFACT, compatible avec de nombreux logiciels comptables.</li>
+      </ul>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Les plateformes pour auto-entrepreneurs</h2>
+      <div className="space-y-4">
+        <div className="p-4 rounded-xl" style={{ border: '2px solid #2EC4B6', background: 'rgba(46,196,182,0.05)' }}>
+          <p className="font-titre font-bold text-vert-fonce">✅ Portail Public de Facturation (PPF / Chorus Pro) — Gratuit</p>
+          <p className="text-sm mt-1">La plateforme de l'État, accessible à tous. Suffisant pour les auto-entrepreneurs avec peu de factures par mois.</p>
+        </div>
+        <div className="p-4 rounded-xl bg-blanc-casse">
+          <p className="font-titre font-bold text-bleu-marine">🔧 PDP privées agréées — 0 à 20€/mois</p>
+          <p className="text-sm mt-1">Des outils comme Pennylane, Axonaut, Freebe, Indy proposent déjà la e-facturation avec des fonctionnalités supplémentaires (comptabilité, devis, etc.). Des offres gratuites existent pour les petits volumes.</p>
+        </div>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Ce qui NE change PAS pour vous</h2>
+      <ul className="list-disc list-inside space-y-2 text-sm">
+        <li><strong>Factures aux particuliers (B2C)</strong> : pas concernées par l'obligation</li>
+        <li><strong>Mentions légales</strong> : identiques (n° SIRET, "TVA non applicable art. 293B", etc.)</li>
+        <li><strong>Franchise TVA</strong> : inchangée (37 500€ / 85 000€)</li>
+        <li><strong>Contenu de la facture</strong> : les mêmes informations, juste dans un format différent</li>
+      </ul>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Que faire maintenant pour se préparer ?</h2>
+      <ol className="list-decimal list-inside space-y-2 text-sm">
+        <li>Identifiez si vos clients sont des professionnels (B2B) ou des particuliers (B2C)</li>
+        <li>Choisissez votre logiciel de facturation dès maintenant (beaucoup sont déjà conformes)</li>
+        <li>Vérifiez que votre logiciel peut émettre du Factur-X — c'est la question à poser à votre éditeur</li>
+        <li>Inscrivez-vous sur le PPF (Portail Public de Facturation) quand il sera ouvert au grand public</li>
+      </ol>
+
+      <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
+        <strong>Source :</strong> <a href="https://www.impots.gouv.fr/professionnel/la-facture-electronique" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr — Facturation électronique</a>
+      </div>
+    </div>
+  ),
+
+  'e-facturation-generale': (
+    <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Pourquoi cette réforme ?</h2>
+      <p>La fraude à la TVA coûte à l'État français environ <strong>15 milliards d'euros par an</strong>. L'e-facturation permettra à la DGFiP de recroiser automatiquement les factures émises et reçues, rendant la fraude beaucoup plus difficile. En parallèle, la réforme doit accélérer les délais de paiement entre entreprises.</p>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">E-facturation vs PDF par email : quelle différence ?</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left"></th><th className="p-3 text-center">PDF par email</th><th className="p-3 text-center">E-facture (Factur-X)</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-gris-clair"><td className="p-3">Format</td><td className="p-3 text-center">PDF libre</td><td className="p-3 text-center font-bold text-vert-menthe">PDF + XML intégré</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">Lisible par machine ?</td><td className="p-3 text-center text-rouge-charges">Non</td><td className="p-3 text-center font-bold text-vert-menthe">Oui</td></tr>
+            <tr className="border-b border-gris-clair"><td className="p-3">Transmission</td><td className="p-3 text-center">Email direct</td><td className="p-3 text-center font-bold text-vert-menthe">Via plateforme agréée</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3">Valeur légale 2027</td><td className="p-3 text-center text-rouge-charges">Insuffisant (B2B)</td><td className="p-3 text-center font-bold text-vert-menthe">Conforme</td></tr>
+            <tr><td className="p-3">Coût</td><td className="p-3 text-center">0€</td><td className="p-3 text-center">0€ à 20€/mois</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Les acteurs de l'écosystème</h2>
+      <ul className="space-y-3 text-sm">
+        <li className="p-3 rounded-xl bg-blanc-casse"><strong>DGFiP</strong> — Direction Générale des Finances Publiques. Elle pilote la réforme et tient le registre des PDP agréées.</li>
+        <li className="p-3 rounded-xl bg-blanc-casse"><strong>PPF (Portail Public de Facturation)</strong> — Anciennement Chorus Pro. Plateforme gratuite de l'État pour toutes les entreprises.</li>
+        <li className="p-3 rounded-xl bg-blanc-casse"><strong>PDP (Plateformes de Dématérialisation Partenaires)</strong> — Opérateurs privés agréés (Pennylane, Sage, Oracle, etc.) offrant des services complémentaires.</li>
+        <li className="p-3 rounded-xl bg-blanc-casse"><strong>OD (Opérateurs de Dématérialisation)</strong> — Logiciels de facturation qui préparent vos factures mais doivent passer par un PPF ou PDP pour transmettre.</li>
+      </ul>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Calendrier de déploiement officiel</h2>
+      <div className="space-y-3">
+        {[
+          { date: '2026', qui: 'Grandes entreprises (CA > 1,5 Md€) et ETI (250+ salariés)', obligation: 'Émission obligatoire', color: '#E63946' },
+          { date: '2027', qui: 'PME, TPE, micro-entreprises et auto-entrepreneurs', obligation: 'Émission ET réception obligatoires', color: '#FF9F1C' },
+        ].map((e) => (
+          <div key={e.date} className="flex items-start gap-4 p-4 rounded-xl" style={{ background: 'rgba(27,45,107,0.04)', border: '1px solid rgba(27,45,107,0.12)' }}>
+            <span className="font-titre font-extrabold text-2xl min-w-12" style={{ color: e.color }}>{e.date}</span>
+            <div>
+              <p className="font-titre font-semibold text-bleu-marine">{e.qui}</p>
+              <p className="font-corps text-sm text-gris-moyen">{e.obligation}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
+        <strong>Sources :</strong>{' '}
+        <a href="https://www.impots.gouv.fr/professionnel/la-facture-electronique" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr</a>{' '}·{' '}
+        <a href="https://www.legifrance.gouv.fr" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">legifrance.gouv.fr</a>
       </div>
     </div>
   ),

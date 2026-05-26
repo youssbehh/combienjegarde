@@ -15,7 +15,7 @@ const faq = [
 ];
 
 export default function SimulateurBICVente() {
-  const { setSecteur, step, resultats, comparatif, ca, secteur, reset, setStep } = useSimulateurStore();
+  const { setSecteur, step, resultats, comparatif, ca, secteur, reset, recommencer, setStep } = useSimulateurStore();
 
   useEffect(() => {
     setSecteur('bic_vente');
@@ -46,7 +46,7 @@ export default function SimulateurBICVente() {
           {step === 2 && <StepFiscal />}
           {step === 3 && resultats && comparatif && (
             <div className="flex flex-col gap-8">
-              <ResultCard resultats={resultats} onReset={reset} />
+              <ResultCard resultats={resultats} onRecommencer={recommencer} onReset={reset} />
               <DonutChart resultats={resultats} />
               <ComparateurRegimes comparatif={comparatif} caAnnuel={ca * 12} />
               <PDFExportButton resultats={resultats} comparatif={comparatif} secteur={secteur} />
