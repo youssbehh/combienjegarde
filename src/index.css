@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bleu-marine:   #1B2D6B;
+  --bleu-moyen:    #2A4494;
+  --vert-menthe:   #2EC4B6;
+  --vert-fonce:    #1A9E92;
+  --orange-cta:    #FF6B35;
+  --orange-hover:  #E85A25;
+  --blanc-casse:   #F8F9FA;
+  --gris-clair:    #E9ECEF;
+  --gris-moyen:    #6C757D;
+  --gris-fonce:    #343A40;
+  --rouge-charges: #E63946;
+  --jaune-impot:   #FF9F1C;
+  --blanc-pur:     #FFFFFF;
+  --font-titre:    'Plus Jakarta Sans', sans-serif;
+  --font-corps:    'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-corps);
+  background-color: var(--blanc-casse);
+  color: var(--gris-fonce);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-titre);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-green {
+  0%, 100% { color: #2EC4B6; }
+  50%       { color: #1A9E92; }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.countup-transition {
+  transition: all 300ms ease-out;
+}

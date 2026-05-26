@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://combienjeGarde.fr/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://combienjeGarde.fr/simulateur-bnc</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://combienjeGarde.fr/simulateur-bic-services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://combienjeGarde.fr/simulateur-bic-vente</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://combienjeGarde.fr/comparateur/ae-vs-sasu</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://combienjeGarde.fr/guide</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://combienjeGarde.fr/guide/tva-auto-entrepreneur</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://combienjeGarde.fr/guide/cotisations-urssaf-ae</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://combienjeGarde.fr/guide/prelevement-liberatoire</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://combienjeGarde.fr/guide/impot-auto-entrepreneur</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

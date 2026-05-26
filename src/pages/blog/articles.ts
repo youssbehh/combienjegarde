@@ -1,0 +1,68 @@
+import type { ArticleData } from '../../types';
+
+export const articles: ArticleData[] = [
+  {
+    slug: 'cotisations-urssaf-ae',
+    title: 'Cotisations URSSAF auto-entrepreneur 2025 : taux et calcul par secteur',
+    description: 'Découvrez les taux de cotisations URSSAF pour auto-entrepreneurs en 2025 : 12,3% BIC vente, 21,2% BIC services, 23,1% BNC. Calcul et déclaration expliqués.',
+    datePublished: '2025-01-15',
+    dateModified: '2025-01-15',
+    readingTime: 6,
+    summary: 'Les cotisations URSSAF en 2025 représentent entre 12,3% et 23,1% de votre CA selon votre secteur. Elles se paient mensuellement ou trimestriellement via le portail autoentrepreneur.urssaf.fr.',
+    faq: [
+      { question: 'Quel est le taux de cotisations URSSAF en 2025 pour un auto-entrepreneur ?', answer: 'En 2025 : 12,3% pour le BIC vente, 21,2% pour le BIC services et prestations, et 23,1% pour le BNC (professions libérales non réglementées).' },
+      { question: 'Quand doit-on payer ses cotisations URSSAF ?', answer: 'Vous pouvez choisir de déclarer et payer mensuellement ou trimestriellement. La déclaration se fait sur le portail autoentrepreneur.urssaf.fr.' },
+      { question: 'Que couvrent les cotisations URSSAF d\'un auto-entrepreneur ?', answer: 'Elles couvrent l\'assurance maladie-maternité, les allocations familiales, la retraite de base et complémentaire, et la formation professionnelle.' },
+      { question: 'Qu\'est-ce que l\'ACRE ?', answer: 'L\'ACRE (Aide à la Création ou Reprise d\'Entreprise) permet de bénéficier d\'une réduction de cotisations pendant la première année d\'activité.' },
+      { question: 'Doit-on payer des cotisations si le CA est nul ?', answer: 'Non. L\'auto-entrepreneur ne paie des cotisations que sur le CA réalisé. Si vous ne déclarez pas de CA, vous ne payez rien.' },
+    ],
+  },
+  {
+    slug: 'impot-auto-entrepreneur',
+    title: 'Impôts auto-entrepreneur 2025 : comment sont calculés vos revenus imposables ?',
+    description: 'Comprendre l\'abattement forfaitaire (71%, 50%, 34%), le barème IR 2025 et choisir entre prélèvement libératoire et barème progressif.',
+    datePublished: '2025-01-20',
+    dateModified: '2025-01-20',
+    readingTime: 8,
+    summary: 'En auto-entreprise, votre revenu imposable est votre CA après abattement forfaitaire (71% BIC vente, 50% BIC services, 34% BNC). Vous pouvez opter pour le barème progressif ou le prélèvement libératoire.',
+    faq: [
+      { question: 'Comment calculer les impôts d\'un auto-entrepreneur ?', answer: 'Revenu imposable = CA × (1 - abattement forfaitaire). Cet abattement est de 71% en BIC vente, 50% en BIC services, 34% en BNC. Ce revenu est ensuite soumis au barème progressif de l\'IR.' },
+      { question: 'Qu\'est-ce que l\'abattement forfaitaire ?', answer: 'L\'abattement forfaitaire représente vos "frais professionnels" estimés. Il réduit votre base imposable sans avoir à justifier de dépenses réelles.' },
+      { question: 'Quelles sont les tranches d\'imposition en 2025 ?', answer: '0% jusqu\'à 11 294€, 11% de 11 294€ à 28 797€, 30% de 28 797€ à 82 341€, 41% de 82 341€ à 177 106€, 45% au-delà.' },
+      { question: 'Comment déclarer ses revenus en auto-entreprise ?', answer: 'Vous déclarez votre CA annuel dans votre déclaration de revenus (formulaire 2042 C PRO), case dédiée aux revenus BNC ou BIC selon votre activité.' },
+      { question: 'Prélèvement libératoire ou barème progressif : que choisir ?', answer: 'Le prélèvement libératoire est avantageux si votre taux marginal d\'imposition est inférieur à 15%. Sinon, le barème progressif est souvent plus intéressant, surtout avec plusieurs parts fiscales.' },
+    ],
+  },
+  {
+    slug: 'tva-auto-entrepreneur',
+    title: 'TVA et auto-entrepreneur 2025 : franchise, seuils, obligations',
+    description: 'Tout savoir sur la TVA en auto-entreprise : franchise en base, seuils 2025 (85 000€ BIC vente, 37 500€ services/BNC), mention obligatoire sur factures.',
+    datePublished: '2025-02-01',
+    dateModified: '2025-02-01',
+    readingTime: 5,
+    summary: 'La plupart des auto-entrepreneurs bénéficient de la franchise en base de TVA et n\'ont donc pas à facturer la TVA à leurs clients. Les seuils sont 85 000€ pour le BIC vente et 37 500€ pour les services et BNC.',
+    faq: [
+      { question: 'Un auto-entrepreneur est-il soumis à la TVA ?', answer: 'Non, tant que son CA reste sous les seuils de franchise. En franchise, vous ne collectez pas la TVA et ne la déduisez pas non plus.' },
+      { question: 'Quel seuil de TVA s\'applique aux freelances en 2025 ?', answer: 'Pour les prestations de services et professions libérales (BNC) : 37 500 €/an. Pour le commerce et la vente (BIC vente) : 85 000 €/an.' },
+      { question: 'Dois-je indiquer quelque chose sur mes factures ?', answer: 'Oui. Vous devez obligatoirement mentionner sur vos factures : "TVA non applicable - article 293 B du CGI".' },
+      { question: 'Que se passe-t-il si je dépasse le seuil en cours d\'année ?', answer: 'Vous devenez redevable de la TVA à compter du premier jour du mois de dépassement. Vous devrez facturer la TVA et effectuer des déclarations périodiques.' },
+      { question: 'Est-il intéressant d\'opter volontairement pour la TVA ?', answer: 'Oui, si vos clients sont des professionnels assujettis à la TVA (ils récupèrent la TVA) ou si vous avez des achats importants dont vous pouvez déduire la TVA.' },
+    ],
+  },
+  {
+    slug: 'prelevement-liberatoire',
+    title: 'Prélèvement libératoire 2025 : est-ce vraiment avantageux pour vous ?',
+    description: 'Comparatif détaillé du prélèvement libératoire vs barème progressif avec exemples chiffrés. Conditions d\'éligibilité et comment opter.',
+    datePublished: '2025-02-10',
+    dateModified: '2025-02-10',
+    readingTime: 7,
+    summary: 'Le prélèvement libératoire est avantageux si votre taux marginal d\'imposition est inférieur à 15%. Pour en bénéficier, votre revenu fiscal de référence N-2 ne doit pas dépasser 27 794€ par part.',
+    faq: [
+      { question: 'Qu\'est-ce que le prélèvement libératoire de l\'impôt ?', answer: 'C\'est une option qui vous permet de payer votre impôt sur le revenu directement avec vos cotisations URSSAF, sous forme d\'un pourcentage fixe de votre CA (1% BIC vente, 1,7% BIC services, 2,2% BNC).' },
+      { question: 'Quelles sont les conditions pour bénéficier du prélèvement libératoire ?', answer: 'Votre revenu fiscal de référence (RFR) de l\'année N-2 ne doit pas dépasser 27 794€ par part de quotient familial.' },
+      { question: 'Comment opter pour le prélèvement libératoire ?', answer: 'Vous devez en faire la demande avant le 30 septembre de l\'année précédant celle de l\'imposition, via le portail autoentrepreneur.urssaf.fr.' },
+      { question: 'Puis-je sortir du prélèvement libératoire ?', answer: 'Oui, vous pouvez renoncer à cette option avant le 30 septembre de l\'année en cours pour ne plus l\'appliquer l\'année suivante.' },
+      { question: 'Le prélèvement libératoire est-il toujours avantageux ?', answer: 'Non. Si vous avez un quotient familial élevé (plusieurs parts) ou peu de revenus annexes, le barème progressif peut être plus intéressant. Utilisez notre simulateur pour comparer.' },
+    ],
+  },
+];
