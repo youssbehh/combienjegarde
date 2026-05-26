@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSimulateurStore } from '../../store/simulateurStore';
 import type { Secteur } from '../../types';
+import type { AnneeFiscale } from '../../lib/constants';
 
 const secteurs: { id: Secteur; emoji: string; label: string; desc: string }[] = [
   { id: 'bic_vente',    emoji: '🛒', label: 'BIC Vente',     desc: 'Commerce, e-commerce, artisanat' },
@@ -9,7 +10,7 @@ const secteurs: { id: Secteur; emoji: string; label: string; desc: string }[] = 
 ];
 
 export default function StepSecteur() {
-  const { ca, secteur, setCA, setSecteur, setStep } = useSimulateurStore();
+  const { ca, secteur, annee, setCA, setSecteur, setAnnee, setStep } = useSimulateurStore();
   const [mode, setMode] = useState<'mensuel' | 'annuel'>('mensuel');
 
   const displayCA = mode === 'annuel' ? ca * 12 : ca;
@@ -24,7 +25,38 @@ export default function StepSecteur() {
 
   return (
     <div className="animate-fadeInUp">
-      <h2 className="font-titre font-bold text-2xl text-bleu-marine mb-6">Votre activité</h2>
+      {/* Toggle année */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-titre font-bold text-2xl text-bleu-marine">Votre activité</h2>
+        <div className="flex items-center gap-2">
+          <span className="font-corps text-xs text-gris-moyen">Année fiscale</span>
+          <div className="flex rounded-xl overflow-hidden border border-gris-clair">
+            {([2025, 2026] as AnneeFiscale[]).map((a) => (
+              <button
+                key={a}
+                onClick={() => setAnnee(a)}
+                className={`px-4 py-1.5 text-sm font-titre font-bold transition-colors ${
+                  annee === a ? 'bg-bleu-marine text-white' : 'bg-white text-gris-moyen hover:bg-blanc-casse'
+                }`}
+              >
+                {a}
+                {a === 2026 && annee === a && (
+                  <span className="ml-1.5 text-xs bg-vert-menthe text-white rounded-full px-1.5 py-0.5">Nouveau</span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {annee === 2026 && (
+        <div
+          className="mb-5 p-3 rounded-xl font-corps text-xs leading-relaxed"
+          style={{ background: 'rgba(46,196,182,0.08)', border: '1px solid rgba(46,196,182,0.3)' }}
+        >
+          <strong className="text-vert-fonce">Taux 2026 actifs</strong> — Barème IR revalorisé (+1,8%), cotisations BNC à 24,6% (réforme retraites libéraux). <a href="/guide/changements-2026" className="underline text-bleu-marine">Voir tous les changements →</a>
+        </div>
+      )}
 
       {/* Secteur cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -63,18 +95,13 @@ export default function StepSecteur() {
         </div>
       </div>
 
-      {/* CA display */}
       <div className="mb-4">
-        <span
-          className="font-titre font-bold text-bleu-marine countup-transition"
-          style={{ fontSize: '32px' }}
-        >
+        <span className="font-titre font-bold text-bleu-marine countup-transition" style={{ fontSize: '32px' }}>
           {displayCA.toLocaleString('fr-FR')} €
         </span>
         <span className="font-corps text-gris-moyen ml-2">/{mode === 'annuel' ? 'an' : 'mois'}</span>
       </div>
 
-      {/* Slider */}
       <input
         type="range"
         min={sliderMin}

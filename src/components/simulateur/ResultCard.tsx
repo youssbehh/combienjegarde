@@ -25,10 +25,11 @@ function AnimatedNumber({ value, prefix = '', suffix = '' }: { value: number; pr
 
 interface Props {
   resultats: ResultatSimulation;
+  onRecommencer: () => void;
   onReset: () => void;
 }
 
-export default function ResultCard({ resultats, onReset }: Props) {
+export default function ResultCard({ resultats, onRecommencer, onReset }: Props) {
   const { cabrut, cotisationsURSSAF, impotEstime, cfeEstimee, revenuNet, tauxPrelevement } = resultats;
 
   return (
@@ -95,12 +96,20 @@ export default function ResultCard({ resultats, onReset }: Props) {
         Estimation basée sur les taux officiels 2025. Non contractuel. Consultez un expert-comptable pour votre situation précise.
       </p>
 
-      <button
-        onClick={onReset}
-        className="mt-4 font-corps text-sm text-blue-300 hover:text-white transition-colors underline"
-      >
-        Nouvelle simulation
-      </button>
+      <div className="mt-4 flex gap-4">
+        <button
+          onClick={onRecommencer}
+          className="font-corps text-sm text-white hover:text-vert-menthe transition-colors flex items-center gap-1"
+        >
+          ↺ Modifier ma simulation
+        </button>
+        <button
+          onClick={onReset}
+          className="font-corps text-sm text-blue-300 hover:text-white transition-colors"
+        >
+          Tout réinitialiser
+        </button>
+      </div>
     </div>
   );
 }

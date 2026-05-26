@@ -1,6 +1,6 @@
-import type { Secteur } from '../lib/constants';
+import type { Secteur, AnneeFiscale } from '../lib/constants';
 
-export type { Secteur };
+export type { Secteur, AnneeFiscale };
 
 export interface ParamsSimulation {
   ca: number;
@@ -8,6 +8,7 @@ export interface ParamsSimulation {
   prelevementLiberatoire: boolean;
   revenuFiscalRef: number;
   nbParts: number;
+  annee: AnneeFiscale;
 }
 
 export interface ResultatSimulation {
@@ -17,6 +18,7 @@ export interface ResultatSimulation {
   cfeEstimee: number;
   revenuNet: number;
   tauxPrelevement: number;
+  annee: AnneeFiscale;
   detail: {
     cotisations: number;
     impot: number;
@@ -39,5 +41,6 @@ export interface ArticleData {
   dateModified: string;
   readingTime: number;
   summary: string;
+  badge?: '2025' | '2026' | 'Nouveau';
   faq: { question: string; answer: string }[];
 }

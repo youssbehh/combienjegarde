@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import type { ResultatSimulation, ResultatComparatif, Secteur } from '../../types';
 
 // ✅ COLLE TON LIEN STRIPE ICI après l'avoir créé dans le Dashboard
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/REMPLACE_PAR_TON_LIEN';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_fZubJ15rA9kmc9Aa7f9R600';
 
 // Clé localStorage pour sauvegarder la simulation avant redirection Stripe
 const STORAGE_KEY = 'cjg_pending_pdf';

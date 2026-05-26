@@ -11,23 +11,24 @@ import { useSimulateurStore } from '../store/simulateurStore';
 import { articles } from './blog/articles';
 
 const faqItems = [
-  { question: 'Combien reste-t-il après cotisations en auto-entreprise ?', answer: 'Selon votre secteur, les cotisations URSSAF représentent entre 12,3% (BIC vente) et 23,1% (BNC) de votre CA. En BNC avec 3 000€/mois, il reste environ 2 200€ après cotisations et impôts.' },
-  { question: 'Comment calculer son revenu net d\'auto-entrepreneur ?', answer: 'Revenu net = CA - cotisations URSSAF - impôt sur le revenu - CFE. Notre simulateur fait ce calcul automatiquement avec les taux officiels 2025.' },
-  { question: 'Qu\'est-ce que le prélèvement libératoire ?', answer: 'Le prélèvement libératoire est une option fiscale qui vous permet de payer l\'impôt sur le revenu en même temps que vos cotisations, sous forme d\'un pourcentage fixe de votre CA.' },
-  { question: 'Quel est le taux de cotisations URSSAF en 2025 ?', answer: 'En 2025 : 12,3% pour le BIC vente, 21,2% pour le BIC services, et 23,1% pour le BNC (professions libérales).' },
-  { question: 'Auto-entrepreneur vs SASU : lequel choisir ?', answer: 'L\'auto-entreprise est idéale pour démarrer et pour les CA inférieurs à 50 000€/an. La SASU devient avantageuse au-delà, notamment pour optimiser les charges sociales.' },
+  { question: 'Combien reste-t-il après cotisations en auto-entreprise en 2026 ?', answer: 'En 2026, les cotisations vont de 12,3% (BIC vente) à 24,6% (BNC, hausse réforme retraites). En BNC avec 3 000€/mois, il reste environ 2 150€ après cotisations et impôts.' },
+  { question: "Comment calculer son revenu net d'auto-entrepreneur ?", answer: 'Revenu net = CA - cotisations URSSAF - impôt sur le revenu - CFE. Notre simulateur fait ce calcul automatiquement avec les taux officiels 2025 et 2026.' },
+  { question: "Qu'est-ce que le prélèvement libératoire ?", answer: "Le prélèvement libératoire est une option fiscale qui vous permet de payer l'impôt sur le revenu en même temps que vos cotisations, sous forme d'un pourcentage fixe de votre CA." },
+  { question: "Quels changements pour les auto-entrepreneurs en 2026 ?", answer: "En 2026 : hausse des cotisations BNC à 24,6%, barème IR revalorisé de +1,8%, et début de l'obligation d'e-facturation pour les grandes entreprises (auto-entrepreneurs concernés en 2027)." },
+  { question: 'Auto-entrepreneur vs SASU : lequel choisir ?', answer: "L'auto-entreprise est idéale pour démarrer et pour les CA inférieurs à 50 000€/an. La SASU devient avantageuse au-delà, notamment pour optimiser les charges sociales." },
 ];
 
 export default function Home() {
-  const { step, resultats, comparatif, ca, secteur, reset } = useSimulateurStore();
+  const { step, resultats, comparatif, ca, secteur, annee, recommencer, reset } = useSimulateurStore();
+  const { setStep } = useSimulateurStore();
 
   const stepLabels = ['Votre activité', 'Situation fiscale', 'Résultats'];
 
   return (
     <>
       <SEOHead
-        title="Simulateur revenu net auto-entrepreneur 2025"
-        description="Calculez votre revenu net d'auto-entrepreneur en 2 minutes. Cotisations URSSAF, impôts, CFE : résultat immédiat avec les taux officiels 2025."
+        title="Simulateur revenu net auto-entrepreneur 2025 & 2026"
+        description="Calculez votre revenu net d'auto-entrepreneur en 2 minutes. Cotisations URSSAF, impôts, CFE : résultat immédiat avec les taux officiels 2025 et 2026."
         canonical="/"
         faqItems={faqItems}
         isSoftwareApp
@@ -44,7 +45,7 @@ export default function Home() {
             Cotisations URSSAF, impôts, CFE : on calcule tout pour vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-10">
-            {['✓ Taux 2025 officiels', '✓ Sans inscription', '✓ 100% gratuit'].map((badge) => (
+            {['✓ Taux 2025 & 2026', '✓ Sans inscription', '✓ 100% gratuit'].map((badge) => (
               <span
                 key={badge}
                 className="font-corps text-sm text-blue-100 px-4 py-2 rounded-full"
@@ -66,34 +67,51 @@ export default function Home() {
 
       {/* SIMULATEUR */}
       <section id="simulateur" className="max-w-4xl mx-auto px-6 py-16">
-        {/* Stepper */}
-        <div className="flex items-center justify-center gap-2 mb-12">
+        {/* Stepper cliquable */}
+        <div className="flex items-center justify-center gap-2 mb-10">
           {stepLabels.map((label, i) => {
-            const num = i + 1;
+            const num = (i + 1) as 1 | 2 | 3;
             const active = step === num;
             const done = step > num;
+            const clickable = done || (num < step);
             return (
               <div key={label} className="flex items-center gap-2">
-                <div className="flex items-center gap-2">
+                <button
+                  className="flex items-center gap-2 group"
+                  onClick={() => clickable && setStep(num)}
+                  disabled={!clickable && !active}
+                  title={done ? `Revenir à : ${label}` : undefined}
+                >
                   <span
                     className="w-8 h-8 rounded-full flex items-center justify-center font-titre font-bold text-sm transition-all"
                     style={{
                       background: active ? '#1B2D6B' : done ? '#2EC4B6' : '#E9ECEF',
                       color: active || done ? '#fff' : '#6C757D',
+                      cursor: clickable ? 'pointer' : 'default',
                     }}
                   >
                     {done ? '✓' : num}
                   </span>
-                  <span className={`font-corps text-sm hidden md:block ${active ? 'text-bleu-marine font-semibold' : 'text-gris-moyen'}`}>
+                  <span className={`font-corps text-sm hidden md:block ${active ? 'text-bleu-marine font-semibold' : done ? 'text-vert-menthe hover:underline cursor-pointer' : 'text-gris-moyen'}`}>
                     {label}
                   </span>
-                </div>
+                </button>
                 {i < stepLabels.length - 1 && (
                   <span className="w-8 h-0.5 bg-gris-clair mx-1" />
                 )}
               </div>
             );
           })}
+
+          {/* Bouton recommencer visible depuis l'étape 2 et 3 */}
+          {step > 1 && (
+            <button
+              onClick={recommencer}
+              className="ml-6 font-corps text-xs text-gris-moyen hover:text-rouge-charges transition-colors flex items-center gap-1 border border-gris-clair rounded-lg px-3 py-1.5 hover:border-rouge-charges"
+            >
+              ↺ Recommencer
+            </button>
+          )}
         </div>
 
         <div className="bg-white rounded-card shadow-card p-8">
@@ -101,7 +119,22 @@ export default function Home() {
           {step === 2 && <StepFiscal />}
           {step === 3 && resultats && comparatif && (
             <div className="flex flex-col gap-8 animate-fadeInUp">
-              <ResultCard resultats={resultats} onReset={reset} />
+              {/* Badge année */}
+              <div className="flex items-center justify-between">
+                <span
+                  className="font-corps text-xs font-medium px-3 py-1 rounded-full"
+                  style={{ background: annee === 2026 ? 'rgba(46,196,182,0.12)' : 'rgba(27,45,107,0.08)', color: annee === 2026 ? '#1A9E92' : '#1B2D6B' }}
+                >
+                  Simulation basée sur les taux {annee}
+                </span>
+                <button
+                  onClick={recommencer}
+                  className="font-corps text-sm text-bleu-marine hover:text-vert-menthe transition-colors flex items-center gap-1.5"
+                >
+                  ↺ Modifier ma simulation
+                </button>
+              </div>
+              <ResultCard resultats={resultats} onRecommencer={recommencer} onReset={reset} />
               <DonutChart resultats={resultats} />
               <ComparateurRegimes comparatif={comparatif} caAnnuel={ca * 12} />
               <PDFExportButton resultats={resultats} comparatif={comparatif} secteur={secteur} />
@@ -118,14 +151,14 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { n: '1', icon: '📊', title: 'Entrez votre CA', desc: 'Renseignez votre chiffre d\'affaires mensuel et choisissez votre secteur d\'activité.' },
-              { n: '2', icon: '⚙️', title: 'Ajoutez votre profil fiscal', desc: 'Optionnel : précisez votre tranche d\'impôt et quotient familial pour un résultat plus précis.' },
-              { n: '3', icon: '💰', title: 'Obtenez votre résultat', desc: 'Visualisez instantanément votre revenu net après cotisations, impôts et CFE.' },
-            ].map((step) => (
-              <div key={step.n} className="text-center">
-                <span className="text-4xl block mb-4">{step.icon}</span>
-                <h3 className="font-titre font-bold text-bleu-marine text-lg mb-2">{step.title}</h3>
-                <p className="font-corps text-sm text-gris-moyen leading-relaxed">{step.desc}</p>
+              { icon: '📊', title: 'Entrez votre CA', desc: "Renseignez votre chiffre d'affaires mensuel, choisissez votre secteur et l'année fiscale (2025 ou 2026)." },
+              { icon: '⚙️', title: 'Ajoutez votre profil fiscal', desc: 'Optionnel : précisez votre tranche d\'impôt et quotient familial pour un résultat plus précis.' },
+              { icon: '💰', title: 'Obtenez votre résultat', desc: 'Visualisez instantanément votre revenu net après cotisations, impôts et CFE.' },
+            ].map((s) => (
+              <div key={s.icon} className="text-center">
+                <span className="text-4xl block mb-4">{s.icon}</span>
+                <h3 className="font-titre font-bold text-bleu-marine text-lg mb-2">{s.title}</h3>
+                <p className="font-corps text-sm text-gris-moyen leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -148,19 +181,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ARTICLES RÉCENTS */}
+      {/* ARTICLES */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="font-titre font-bold text-bleu-marine text-3xl mb-8">Guides et articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {articles.slice(0, 3).map((a) => (
+          {articles.slice(0, 6).map((a) => (
             <ArticleCard key={a.slug} {...a} />
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link
-            to="/guide"
-            className="inline-block font-corps font-medium text-bleu-marine hover:text-bleu-moyen transition-colors border-b border-bleu-marine/30 hover:border-bleu-moyen"
-          >
+          <Link to="/guide" className="inline-block font-corps font-medium text-bleu-marine hover:text-bleu-moyen transition-colors border-b border-bleu-marine/30 hover:border-bleu-moyen">
             Voir tous les articles →
           </Link>
         </div>
@@ -169,9 +199,7 @@ export default function Home() {
       {/* SOURCES */}
       <section className="bg-blanc-casse py-12 px-6 border-t border-gris-clair">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="font-corps text-sm text-gris-moyen mb-6">
-            Nos données proviennent exclusivement de sources officielles
-          </p>
+          <p className="font-corps text-sm text-gris-moyen mb-6">Nos données proviennent exclusivement de sources officielles</p>
           <div className="flex flex-wrap justify-center gap-6">
             {[
               { label: 'URSSAF', href: 'https://www.autoentrepreneur.urssaf.fr' },

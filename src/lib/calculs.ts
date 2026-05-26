@@ -1,12 +1,16 @@
-import { TAUX_2025 } from './constants';
+import { TAUX_PAR_ANNEE } from './constants';
 import type { ParamsSimulation, ResultatSimulation, ResultatComparatif } from '../types';
 
-function calculerIRBareme(revenuImposableAnnuel: number, nbParts: number): number {
+function calculerIRBareme(
+  revenuImposableAnnuel: number,
+  nbParts: number,
+  bareme: readonly { seuil: number; taux: number }[]
+): number {
   const quotient = revenuImposableAnnuel / nbParts;
   let impotParPart = 0;
   let seuilPrecedent = 0;
 
-  for (const tranche of TAUX_2025.bareme_ir) {
+  for (const tranche of bareme) {
     if (quotient <= seuilPrecedent) break;
     const imposable = Math.min(quotient, tranche.seuil) - seuilPrecedent;
     impotParPart += imposable * tranche.taux;
@@ -17,22 +21,23 @@ function calculerIRBareme(revenuImposableAnnuel: number, nbParts: number): numbe
 }
 
 export function calculerRevenuNet(params: ParamsSimulation): ResultatSimulation {
-  const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts } = params;
+  const { ca, secteur, prelevementLiberatoire, revenuFiscalRef, nbParts, annee } = params;
+  const taux = TAUX_PAR_ANNEE[annee];
 
-  const cotisationsURSSAF = Math.round(ca * TAUX_2025.cotisations[secteur]);
+  const cotisationsURSSAF = Math.round(ca * taux.cotisations[secteur]);
 
   let impotEstime: number;
   if (prelevementLiberatoire) {
-    impotEstime = Math.round(ca * TAUX_2025.prelevement_liberatoire[secteur]);
+    impotEstime = Math.round(ca * taux.prelevement_liberatoire[secteur]);
   } else {
-    const abattement = TAUX_2025.abattement_forfaitaire[secteur];
+    const abattement = taux.abattement_forfaitaire[secteur];
     const caAnnuel = ca * 12;
     const revenuImposableAE = Math.round(caAnnuel * (1 - abattement));
     const revenuGlobal = revenuImposableAE + revenuFiscalRef;
-    impotEstime = calculerIRBareme(revenuGlobal, nbParts);
+    impotEstime = calculerIRBareme(revenuGlobal, nbParts, taux.bareme_ir);
   }
 
-  const cfeEstimee = TAUX_2025.cfe_mensuelle;
+  const cfeEstimee = taux.cfe_mensuelle;
   const revenuNet = Math.max(0, ca - cotisationsURSSAF - impotEstime - cfeEstimee);
   const tauxPrelevement = ca > 0
     ? Math.round(((cotisationsURSSAF + impotEstime + cfeEstimee) / ca) * 1000) / 10
@@ -45,6 +50,7 @@ export function calculerRevenuNet(params: ParamsSimulation): ResultatSimulation 
     cfeEstimee,
     revenuNet,
     tauxPrelevement,
+    annee,
     detail: {
       cotisations: cotisationsURSSAF,
       impot: impotEstime,
