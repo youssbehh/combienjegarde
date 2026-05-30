@@ -9,9 +9,10 @@ import PDFExportButton from '../components/simulateur/PDFExportButton';
 import StepSecteur from '../components/simulateur/StepSecteur';
 
 const faq = [
-  { question: 'Quel est le taux de cotisations URSSAF en BNC ?', answer: 'En 2025, le taux est de 23,1% du CA pour les professions libérales non réglementées (BNC).' },
+  { question: 'Quel est le taux de cotisations URSSAF en BNC en 2026 ?', answer: 'En 2026, le taux est de 24,6% du CA pour les professions libérales non réglementées (BNC), contre 23,1% en 2025. Cette hausse de +1,5 point résulte de la réforme des retraites des libéraux.' },
   { question: 'Qu\'est-ce que le BNC ?', answer: 'Le BNC (Bénéfices Non Commerciaux) est le régime fiscal des professions libérales : développeurs, designers, consultants, médecins, avocats, etc.' },
   { question: 'Quel est l\'abattement forfaitaire en BNC ?', answer: 'L\'abattement forfaitaire est de 34% en BNC. Votre revenu imposable est donc 66% de votre CA annuel.' },
+  { question: 'Quelle est la différence entre BNC SSI et BNC CIPAV ?', answer: 'SSI (non réglementé) : développeurs, designers, consultants — taux 24,6% en 2026. CIPAV (réglementé) : médecins, avocats, architectes — taux 24,7% en 2026. Utilisez le simulateur général pour choisir votre caisse.' },
 ];
 
 export default function SimulateurBNC() {
@@ -25,8 +26,8 @@ export default function SimulateurBNC() {
   return (
     <>
       <SEOHead
-        title="Simulateur de revenu net BNC 2025 — Freelances et professions libérales"
-        description="Calculez votre revenu net en BNC (profession libérale) après cotisations URSSAF (23,1%) et impôts. Résultat immédiat, taux 2025."
+        title="Simulateur de revenu net BNC 2026 — Freelances et professions libérales"
+        description="Calculez votre revenu net en BNC (profession libérale) après cotisations URSSAF (24,6% en 2026) et impôts. Résultat immédiat, taux officiels 2026."
         canonical="/simulateur-bnc"
         faqItems={faq}
       />
@@ -34,10 +35,10 @@ export default function SimulateurBNC() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-10">
           <h1 className="font-titre font-extrabold text-bleu-marine text-3xl mb-4">
-            Simulateur de revenu net BNC 2025
+            Simulateur de revenu net BNC 2026
           </h1>
           <p className="font-corps text-gris-moyen leading-relaxed max-w-2xl">
-            Vous exercez une profession libérale non réglementée (développeur, designer, consultant, médecin, avocat…) ? En BNC, vos cotisations URSSAF s'élèvent à <strong>23,1%</strong> de votre chiffre d'affaires. L'abattement forfaitaire de <strong>34%</strong> réduit votre base imposable. Calculez en temps réel combien il vous reste vraiment.
+            Vous exercez une profession libérale non réglementée (développeur, designer, consultant…) ? En BNC 2026, vos cotisations URSSAF s'élèvent à <strong>24,6%</strong> de votre chiffre d'affaires (+1,5 pt vs 2025). L'abattement forfaitaire de <strong>34%</strong> réduit votre base imposable. Calculez en temps réel combien il vous reste vraiment.
           </p>
         </div>
 

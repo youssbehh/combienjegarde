@@ -41,6 +41,9 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
   const pctDuSeuil = caAnnuel / seuilTVA;
   const showTVAAlerte = pctDuSeuil >= 0.75;
 
+  const plafondCA = taux.plafonds_ca[secteur];
+  const showPlafondAlerte = caAnnuel > plafondCA * 0.85;
+
   return (
     <div>
       <div
@@ -137,6 +140,27 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
           </button>
         </div>
       </div>
+
+      {/* Alerte plafond CA micro-entrepreneur */}
+      {showPlafondAlerte && (
+        <div
+          className="mt-4 p-4 rounded-xl font-corps text-sm leading-relaxed"
+          style={{
+            background: caAnnuel > plafondCA ? 'rgba(230,57,70,0.07)' : 'rgba(255,159,28,0.09)',
+            border: `1px solid ${caAnnuel > plafondCA ? 'rgba(230,57,70,0.35)' : 'rgba(255,159,28,0.4)'}`,
+          }}
+        >
+          <strong style={{ color: caAnnuel > plafondCA ? '#E63946' : '#CC7A00' }}>
+            {caAnnuel > plafondCA ? '⚠️ Plafond CA dépassé' : `⚠️ Proche du plafond CA (${Math.round((caAnnuel / plafondCA) * 100)}%)`}
+          </strong>
+          <p className="mt-1 text-gris-fonce">
+            {caAnnuel > plafondCA
+              ? `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) dépasse le plafond du régime auto-entrepreneur (${plafondCA.toLocaleString('fr-FR')} €). Au-delà, vous basculez au régime réel.`
+              : `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) approche du plafond micro-entrepreneur (${plafondCA.toLocaleString('fr-FR')} €). Anticipez un éventuel changement de régime.`
+            }
+          </p>
+        </div>
+      )}
 
       {/* Alerte seuil TVA */}
       {showTVAAlerte && (

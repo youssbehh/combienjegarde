@@ -207,57 +207,210 @@ const articleContent: Record<string, React.ReactNode> = {
 
   'e-facturation-auto-entrepreneur': (
     <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Qu'est-ce que l'e-facturation obligatoire ?</h2>
-      <p>L'e-facturation (ou facturation électronique structurée) est l'obligation d'émettre et de recevoir des factures dans un <strong>format numérique normalisé</strong> transmis via une plateforme agréée par l'État. Ce n'est pas un simple PDF envoyé par email — c'est une facture que les systèmes informatiques peuvent lire automatiquement.</p>
 
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Calendrier : quand serez-vous concerné ?</h2>
+      <div className="p-4 rounded-xl font-corps text-sm" style={{ background: 'rgba(230,57,70,0.06)', border: '1px solid rgba(230,57,70,0.25)' }}>
+        <strong style={{ color: '#E63946' }}>⚠️ Date clé :</strong> À partir du <strong>1er janvier 2027</strong>, tous les auto-entrepreneurs devront émettre leurs factures B2B au format électronique structuré via une plateforme agréée. Amende : <strong>15 € par facture non conforme</strong>, plafonnée à 15 000 €/an.
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Qu'est-ce que l'e-facturation obligatoire ?</h2>
+      <p>L'e-facturation (ou facturation électronique structurée) est l'obligation d'émettre des factures dans un <strong>format numérique normalisé</strong> transmis via une plateforme agréée par l'État. Ce n'est <strong>pas</strong> un simple PDF envoyé par email — c'est une facture lisible automatiquement par les logiciels comptables et par l'administration fiscale.</p>
+      <p>L'objectif de l'État : croiser les données de facturation en temps réel pour lutter contre la fraude à la TVA (15 milliards €/an en France).</p>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Êtes-vous concerné ? Checklist rapide</h2>
+      <div className="space-y-2 text-sm">
+        {[
+          { label: 'Vous facturez des entreprises (B2B) ? → Oui, concerné en 2027', ok: true },
+          { label: 'Vous facturez uniquement des particuliers (B2C) ? → Pas concerné', ok: false },
+          { label: 'Vous êtes en franchise de TVA ? → Concerné quand même pour les B2B', ok: true },
+          { label: 'Votre client est une grande entreprise ? → Déjà concerné depuis 2026 (doit recevoir)', ok: true },
+        ].map((item) => (
+          <div key={item.label} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: item.ok ? 'rgba(46,196,182,0.06)' : 'rgba(108,117,125,0.06)' }}>
+            <span style={{ color: item.ok ? '#2EC4B6' : '#6C757D' }}>{item.ok ? '✓' : '—'}</span>
+            <span>{item.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Calendrier officiel</h2>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
-          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Date</th><th className="p-3 text-left">Qui est concerné ?</th><th className="p-3 text-left">Obligation</th></tr></thead>
+          <thead><tr className="bg-bleu-marine text-white"><th className="p-3 text-left">Date</th><th className="p-3 text-left">Qui ?</th><th className="p-3 text-left">Obligation</th></tr></thead>
           <tbody>
-            <tr className="border-b border-gris-clair"><td className="p-3 font-bold">2026</td><td className="p-3">Grandes entreprises et ETI</td><td className="p-3">Émettre des e-factures</td></tr>
-            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3 font-bold text-rouge-charges">2027</td><td className="p-3">PME, micro-entreprises, auto-entrepreneurs</td><td className="p-3 font-bold">Émettre ET recevoir</td></tr>
+            <tr className="border-b border-gris-clair"><td className="p-3 font-bold">2026</td><td className="p-3">Grandes entreprises (CA &gt; 1,5 Md€) et ETI</td><td className="p-3">Émission obligatoire</td></tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse"><td className="p-3 font-bold text-rouge-charges">2027</td><td className="p-3 font-semibold">PME, micro-entreprises, auto-entrepreneurs</td><td className="p-3 font-bold text-rouge-charges">Émission ET réception</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Les formats de factures acceptés</h2>
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Le format Factur-X : le plus simple pour vous</h2>
+      <p>Il existe 3 formats acceptés, mais un seul est vraiment adapté aux auto-entrepreneurs :</p>
       <ul className="space-y-3">
-        <li className="p-4 rounded-xl bg-blanc-casse"><strong>Factur-X</strong> — Le plus simple pour les auto-entrepreneurs. C'est un PDF standard avec des données XML intégrées invisibles. Vos clients voient un beau PDF, les systèmes lisent les données automatiquement.</li>
-        <li className="p-4 rounded-xl bg-blanc-casse"><strong>UBL (Universal Business Language)</strong> — Format XML international, surtout utilisé dans les grands groupes et les échanges européens.</li>
-        <li className="p-4 rounded-xl bg-blanc-casse"><strong>CII (Cross Industry Invoice)</strong> — Standard UN/CEFACT, compatible avec de nombreux logiciels comptables.</li>
+        <li className="p-4 rounded-xl" style={{ border: '2px solid #2EC4B6', background: 'rgba(46,196,182,0.04)' }}>
+          <strong className="text-vert-fonce">✅ Factur-X (recommandé)</strong> — C'est un PDF normal avec des données XML invisibles intégrées. Vos clients voient un beau PDF, les systèmes comptables lisent les données automatiquement. La plupart des logiciels de facturation français le supportent.
+        </li>
+        <li className="p-4 rounded-xl bg-blanc-casse">
+          <strong>UBL (Universal Business Language)</strong> — Format XML pur, plutôt utilisé dans les grands groupes et les échanges européens. Pas nécessaire pour les auto-entrepreneurs.
+        </li>
+        <li className="p-4 rounded-xl bg-blanc-casse">
+          <strong>CII (Cross Industry Invoice)</strong> — Standard international UN/CEFACT. Compatible avec les logiciels comptables professionnels.
+        </li>
       </ul>
 
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Les plateformes pour auto-entrepreneurs</h2>
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Quelle plateforme choisir ?</h2>
       <div className="space-y-4">
         <div className="p-4 rounded-xl" style={{ border: '2px solid #2EC4B6', background: 'rgba(46,196,182,0.05)' }}>
-          <p className="font-titre font-bold text-vert-fonce">✅ Portail Public de Facturation (PPF / Chorus Pro) — Gratuit</p>
-          <p className="text-sm mt-1">La plateforme de l'État, accessible à tous. Suffisant pour les auto-entrepreneurs avec peu de factures par mois.</p>
+          <p className="font-titre font-bold" style={{ color: '#1A9E92' }}>✅ Portail Public de Facturation (PPF / Chorus Pro) — 100% Gratuit</p>
+          <p className="text-sm mt-1">La plateforme de l'État, accessible à tous. Suffisant si vous émettez moins de 20-30 factures par mois. Aucun abonnement, aucun engagement.</p>
         </div>
         <div className="p-4 rounded-xl bg-blanc-casse">
-          <p className="font-titre font-bold text-bleu-marine">🔧 PDP privées agréées — 0 à 20€/mois</p>
-          <p className="text-sm mt-1">Des outils comme Pennylane, Axonaut, Freebe, Indy proposent déjà la e-facturation avec des fonctionnalités supplémentaires (comptabilité, devis, etc.). Des offres gratuites existent pour les petits volumes.</p>
+          <p className="font-titre font-bold text-bleu-marine">🔧 PDP privées agréées — 0 à 20 €/mois</p>
+          <p className="text-sm mt-1">Des outils comme <strong>Freebe</strong>, <strong>Indy</strong>, <strong>Pennylane</strong>, <strong>Abby</strong> ou <strong>Axonaut</strong> proposent la e-facturation avec comptabilité intégrée, relances automatiques, et synchronisation bancaire. Des offres gratuites ou à moins de 10€/mois existent pour les petits volumes.</p>
+          <p className="text-sm mt-2">→ <Link to="/guide/solutions-e-facturation-auto-entrepreneur-gratuit" className="text-vert-menthe underline">Voir le comparatif complet des solutions gratuites</Link></p>
         </div>
       </div>
 
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Ce qui NE change PAS pour vous</h2>
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Ce qui NE change PAS</h2>
       <ul className="list-disc list-inside space-y-2 text-sm">
-        <li><strong>Factures aux particuliers (B2C)</strong> : pas concernées par l'obligation</li>
-        <li><strong>Mentions légales</strong> : identiques (n° SIRET, "TVA non applicable art. 293B", etc.)</li>
-        <li><strong>Franchise TVA</strong> : inchangée (37 500€ / 85 000€)</li>
-        <li><strong>Contenu de la facture</strong> : les mêmes informations, juste dans un format différent</li>
+        <li><strong>Factures aux particuliers (B2C)</strong> : aucune obligation, continuez comme avant</li>
+        <li><strong>Mentions légales obligatoires</strong> : identiques (SIRET, "TVA non applicable art. 293B", etc.)</li>
+        <li><strong>Seuils de franchise TVA</strong> : inchangés (37 500€ services, 85 000€ vente)</li>
+        <li><strong>Contenu de la facture</strong> : les mêmes informations, juste transmises différemment</li>
+        <li><strong>Délai de paiement</strong> : inchangé</li>
       </ul>
 
-      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Que faire maintenant pour se préparer ?</h2>
-      <ol className="list-decimal list-inside space-y-2 text-sm">
-        <li>Identifiez si vos clients sont des professionnels (B2B) ou des particuliers (B2C)</li>
-        <li>Choisissez votre logiciel de facturation dès maintenant (beaucoup sont déjà conformes)</li>
-        <li>Vérifiez que votre logiciel peut émettre du Factur-X — c'est la question à poser à votre éditeur</li>
-        <li>Inscrivez-vous sur le PPF (Portail Public de Facturation) quand il sera ouvert au grand public</li>
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Se préparer en 5 étapes</h2>
+      <ol className="space-y-3">
+        {[
+          { num: 1, text: "Identifiez la nature de vos clients : B2B (entreprises avec SIRET) ou B2C (particuliers)" },
+          { num: 2, text: "Si vous avez des clients B2B, vérifiez que votre logiciel de facturation supporte le format Factur-X" },
+          { num: 3, text: "Ouvrez un compte sur le PPF (Chorus Pro) — c'est gratuit et ça prend 10 minutes" },
+          { num: 4, text: "Testez la création d'une facture Factur-X avant 2027 pour vous familiariser" },
+          { num: 5, text: "Informez vos clients professionnels que vous passerez à l'e-facturation en 2027" },
+        ].map((step) => (
+          <li key={step.num} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(27,45,107,0.04)' }}>
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-bleu-marine text-white font-titre font-bold text-sm flex items-center justify-center">{step.num}</span>
+            <span>{step.text}</span>
+          </li>
+        ))}
       </ol>
 
       <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
-        <strong>Source :</strong> <a href="https://www.impots.gouv.fr/professionnel/la-facture-electronique" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr — Facturation électronique</a>
+        <strong>Sources officielles :</strong>{' '}
+        <a href="https://www.impots.gouv.fr/professionnel/la-facture-electronique" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr</a>
+        {' · '}
+        <a href="https://www.legifrance.gouv.fr" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">legifrance.gouv.fr</a>
+      </div>
+    </div>
+  ),
+
+  'solutions-e-facturation-auto-entrepreneur-gratuit': (
+    <div className="font-corps text-gris-fonce leading-relaxed space-y-6">
+
+      <div className="p-4 rounded-xl text-sm" style={{ background: 'rgba(46,196,182,0.08)', border: '1px solid rgba(46,196,182,0.3)' }}>
+        <strong style={{ color: '#1A9E92' }}>Bonne nouvelle :</strong> il existe des solutions <strong>100% gratuites</strong> pour être conforme à l'e-facturation obligatoire 2027. Pas besoin d'investir dans un logiciel coûteux.
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">La solution gratuite de référence : le PPF (Chorus Pro)</h2>
+      <p>Le <strong>Portail Public de Facturation (PPF)</strong>, anciennement Chorus Pro, est la plateforme officielle de l'État. Elle est <strong>entièrement gratuite</strong>, sans limite de volume, et sera disponible pour tous les auto-entrepreneurs dès 2027.</p>
+      <div className="p-4 rounded-xl" style={{ border: '2px solid #2EC4B6', background: 'rgba(46,196,182,0.04)' }}>
+        <ul className="text-sm space-y-1">
+          <li>✅ Gratuit, sans abonnement</li>
+          <li>✅ Plateforme officielle DGFiP</li>
+          <li>✅ Supporte Factur-X, UBL, CII</li>
+          <li>✅ Suffisant pour 1 à 50 factures/mois</li>
+          <li>⚠️ Interface basique, pas de comptabilité intégrée</li>
+        </ul>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Comparatif des solutions pour auto-entrepreneurs</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-bleu-marine text-white">
+              <th className="p-3 text-left">Solution</th>
+              <th className="p-3 text-center">Prix</th>
+              <th className="p-3 text-center">Factur-X</th>
+              <th className="p-3 text-center">Compta intégrée</th>
+              <th className="p-3 text-center">Adapté AE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b border-gris-clair" style={{ background: 'rgba(46,196,182,0.04)' }}>
+              <td className="p-3 font-semibold">PPF / Chorus Pro</td>
+              <td className="p-3 text-center font-bold text-vert-menthe">Gratuit</td>
+              <td className="p-3 text-center">✅</td>
+              <td className="p-3 text-center text-gris-moyen">—</td>
+              <td className="p-3 text-center">⭐⭐⭐</td>
+            </tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse">
+              <td className="p-3 font-semibold">Abby</td>
+              <td className="p-3 text-center font-bold text-vert-menthe">Gratuit / 9€</td>
+              <td className="p-3 text-center">✅ (en cours)</td>
+              <td className="p-3 text-center">Partielle</td>
+              <td className="p-3 text-center">⭐⭐⭐</td>
+            </tr>
+            <tr className="border-b border-gris-clair">
+              <td className="p-3 font-semibold">Freebe</td>
+              <td className="p-3 text-center">Gratuit / 8€</td>
+              <td className="p-3 text-center">✅ (roadmap)</td>
+              <td className="p-3 text-center">Oui</td>
+              <td className="p-3 text-center">⭐⭐⭐</td>
+            </tr>
+            <tr className="border-b border-gris-clair bg-blanc-casse">
+              <td className="p-3 font-semibold">Indy</td>
+              <td className="p-3 text-center">9€ – 22€</td>
+              <td className="p-3 text-center">✅ (roadmap)</td>
+              <td className="p-3 text-center">Oui</td>
+              <td className="p-3 text-center">⭐⭐⭐</td>
+            </tr>
+            <tr className="border-b border-gris-clair">
+              <td className="p-3 font-semibold">Zervant</td>
+              <td className="p-3 text-center">Gratuit / 10€</td>
+              <td className="p-3 text-center">En cours</td>
+              <td className="p-3 text-center">—</td>
+              <td className="p-3 text-center">⭐⭐</td>
+            </tr>
+            <tr className="bg-blanc-casse">
+              <td className="p-3 font-semibold">Pennylane</td>
+              <td className="p-3 text-center text-gris-moyen">29€+</td>
+              <td className="p-3 text-center">✅</td>
+              <td className="p-3 text-center">Oui (complet)</td>
+              <td className="p-3 text-center text-gris-moyen">⭐ (surdimensionné)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gris-moyen">* Informations à titre indicatif. Vérifiez les tarifs actuels sur les sites officiels des éditeurs.</p>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Notre recommandation selon votre situation</h2>
+      <div className="space-y-4">
+        <div className="p-4 rounded-xl bg-blanc-casse">
+          <p className="font-titre font-semibold text-bleu-marine">Vous avez peu de clients B2B (&lt; 10 factures/mois)</p>
+          <p className="text-sm mt-1">→ <strong>PPF (Chorus Pro)</strong> — 100% gratuit, suffisant, aucun risque.</p>
+        </div>
+        <div className="p-4 rounded-xl bg-blanc-casse">
+          <p className="font-titre font-semibold text-bleu-marine">Vous voulez un vrai outil de facturation avec suivi</p>
+          <p className="text-sm mt-1">→ <strong>Freebe</strong> ou <strong>Abby</strong> en version gratuite ou à moins de 10€/mois.</p>
+        </div>
+        <div className="p-4 rounded-xl bg-blanc-casse">
+          <p className="font-titre font-semibold text-bleu-marine">Vous voulez comptabilité + facturation tout-en-un</p>
+          <p className="text-sm mt-1">→ <strong>Indy</strong> (à partir de 9€/mois) — populaire parmi les freelances BNC.</p>
+        </div>
+      </div>
+
+      <h2 className="font-titre font-bold text-bleu-marine text-2xl">Questions clés à poser à votre logiciel actuel</h2>
+      <ol className="list-decimal list-inside space-y-2 text-sm">
+        <li>Mon logiciel génère-t-il des factures au format <strong>Factur-X</strong> ?</li>
+        <li>Est-il connecté au <strong>PPF (Chorus Pro)</strong> ou est-il lui-même une PDP agréée ?</li>
+        <li>La mise à jour pour la conformité 2027 est-elle incluse dans mon abonnement actuel ?</li>
+        <li>Y a-t-il des frais supplémentaires pour passer à l'e-facturation ?</li>
+      </ol>
+
+      <div className="p-4 rounded-xl text-sm" style={{ background: '#FFF3CD', border: '1px solid #FFC107' }}>
+        <strong>Pour aller plus loin :</strong>{' '}
+        <Link to="/guide/e-facturation-auto-entrepreneur" className="text-bleu-marine underline">Guide complet e-facturation auto-entrepreneur 2027</Link>
+        {' · '}
+        <a href="https://www.impots.gouv.fr/professionnel/la-facture-electronique" className="text-bleu-marine underline" target="_blank" rel="noopener noreferrer">impots.gouv.fr</a>
       </div>
     </div>
   ),

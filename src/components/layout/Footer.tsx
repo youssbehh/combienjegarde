@@ -10,7 +10,7 @@ export default function Footer() {
             CombienJeGarde<span className="text-vert-menthe">.fr</span>
           </p>
           <p className="font-corps text-sm text-blue-200 leading-relaxed mb-4">
-            Le simulateur de revenu net pour auto-entrepreneurs français. Simple, rapide, basé sur les taux officiels 2025.
+            Le simulateur de revenu net pour auto-entrepreneurs français. Simple, rapide, basé sur les taux officiels 2026.
           </p>
           <p className="font-corps text-xs text-blue-300">
             Outil d'estimation — non contractuel. Consultez un expert-comptable pour votre situation personnelle.
@@ -31,12 +31,12 @@ export default function Footer() {
 
         {/* Col 3 */}
         <div>
-          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">Articles récents</h3>
+          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">E-facturation & 2026</h3>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link to="/guide/changements-2026" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(46,196,182,0.25)', color: '#2EC4B6' }}>2026</span>
-                Changements auto-entrepreneur 2026
+              <Link to="/guide/solutions-e-facturation-auto-entrepreneur-gratuit" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FF6B35' }}>Nouveau</span>
+                Logiciels e-facturation gratuits
               </Link>
             </li>
             <li>
@@ -46,15 +46,15 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/guide/cotisations-urssaf-2026" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(46,196,182,0.25)', color: '#2EC4B6' }}>2026</span>
-                Cotisations URSSAF 2026
-              </Link>
-            </li>
-            <li>
               <Link to="/guide/e-facturation-generale" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
                 <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FF6B35' }}>Nouveau</span>
                 Réforme e-facturation 2026-2027
+              </Link>
+            </li>
+            <li>
+              <Link to="/guide/changements-2026" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(46,196,182,0.25)', color: '#2EC4B6' }}>2026</span>
+                Changements auto-entrepreneur 2026
               </Link>
             </li>
           </ul>

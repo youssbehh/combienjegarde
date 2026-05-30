@@ -10,6 +10,7 @@ import SimulateurBICVente from './pages/SimulateurBICVente';
 import ComparateurAEvsSASU from './pages/ComparateurAEvsSASU';
 import BlogIndex from './pages/blog/BlogIndex';
 import ArticlePage from './pages/blog/ArticlePage';
+import MentionsLegales from './pages/MentionsLegales';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/comparateur/ae-vs-sasu" element={<ComparateurAEvsSASU />} />
             <Route path="/guide" element={<BlogIndex />} />
             <Route path="/guide/:slug" element={<ArticlePage />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

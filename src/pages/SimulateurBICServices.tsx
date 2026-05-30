@@ -9,9 +9,10 @@ import PDFExportButton from '../components/simulateur/PDFExportButton';
 import StepSecteur from '../components/simulateur/StepSecteur';
 
 const faq = [
-  { question: 'Quel est le taux de cotisations en BIC Services ?', answer: 'En 2025, le taux est de 21,2% du CA pour les prestations de services commerciales (BIC Services).' },
-  { question: 'Quelle est la différence entre BIC Services et BNC ?', answer: 'Le BIC Services concerne les activités commerciales de services (agence, conseil commercial). Le BNC concerne les professions libérales et intellectuelles.' },
+  { question: 'Quel est le taux de cotisations en BIC Services en 2026 ?', answer: 'En 2026, le taux est de 21,2% du CA pour les prestations de services commerciales (BIC Services), inchangé par rapport à 2025.' },
+  { question: 'Quelle est la différence entre BIC Services et BNC ?', answer: 'Le BIC Services concerne les activités commerciales de services (agence, conseil commercial, formation). Le BNC concerne les professions libérales et intellectuelles (freelances, médecins, avocats…).' },
   { question: 'Quel abattement forfaitaire en BIC Services ?', answer: '50% d\'abattement forfaitaire. Vous êtes imposé sur 50% de votre CA annuel.' },
+  { question: 'Quel est le plafond de CA en BIC Services 2026 ?', answer: 'Le plafond de CA annuel est de 77 700 € pour rester auto-entrepreneur en BIC Services. La franchise TVA commence à 37 500 €.' },
 ];
 
 export default function SimulateurBICServices() {
@@ -25,8 +26,8 @@ export default function SimulateurBICServices() {
   return (
     <>
       <SEOHead
-        title="Simulateur revenu net BIC Services 2025 — Conseil, formation, agence"
-        description="Calculez votre revenu net en BIC Services (prestations) après cotisations URSSAF (21,2%) et impôts. Taux officiels 2025."
+        title="Simulateur revenu net BIC Services 2026 — Conseil, formation, agence"
+        description="Calculez votre revenu net en BIC Services (prestations) après cotisations URSSAF (21,2%) et impôts. Taux officiels 2026, résultat immédiat."
         canonical="/simulateur-bic-services"
         faqItems={faq}
       />
@@ -34,10 +35,10 @@ export default function SimulateurBICServices() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-10">
           <h1 className="font-titre font-extrabold text-bleu-marine text-3xl mb-4">
-            Simulateur de revenu net BIC Services 2025
+            Simulateur de revenu net BIC Services 2026
           </h1>
           <p className="font-corps text-gris-moyen leading-relaxed max-w-2xl">
-            Activité de conseil, formation, agence ou autre prestation de service commerciale ? En BIC Services, les cotisations sont de <strong>21,2%</strong> et l'abattement forfaitaire de <strong>50%</strong>.
+            Activité de conseil, formation, agence ou autre prestation de service commerciale ? En BIC Services, les cotisations sont de <strong>21,2%</strong> (inchangé en 2026) et l'abattement forfaitaire de <strong>50%</strong>.
           </p>
         </div>
 

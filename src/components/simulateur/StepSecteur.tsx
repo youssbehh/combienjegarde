@@ -34,9 +34,11 @@ export default function StepSecteur() {
 
   const moyenneCA = Math.round(moisCA.reduce((s, v) => s + v, 0) / 12);
 
+  // BIC Vente plafond 188 700€/an (~15 700/mois) — les autres à 77 700€/an
+  const isBICVente = secteur === 'bic_vente';
   const sliderMin = mode === 'annuel' ? 6000 : 500;
-  const sliderMax = mode === 'annuel' ? 120000 : 10000;
-  const sliderStep = mode === 'annuel' ? 1200 : 100;
+  const sliderMax = mode === 'annuel' ? (isBICVente ? 180000 : 120000) : (isBICVente ? 15000 : 10000);
+  const sliderStep = mode === 'annuel' ? (isBICVente ? 6000 : 1200) : (isBICVente ? 500 : 100);
 
   const handleNext = () => {
     if (caMode === 'variable') setCA(moyenneCA);

@@ -27,8 +27,8 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="Simulateur revenu net auto-entrepreneur 2025 & 2026"
-        description="Calculez votre revenu net d'auto-entrepreneur en 2 minutes. Cotisations URSSAF, impôts, CFE : résultat immédiat avec les taux officiels 2025 et 2026."
+        title="Simulateur revenu net auto-entrepreneur 2026 — Taux officiels URSSAF"
+        description="Calculez votre revenu net d'auto-entrepreneur en 2 minutes. Cotisations URSSAF, impôts, CFE : résultat immédiat avec les taux officiels 2026 (et 2025 pour comparaison)."
         canonical="/"
         faqItems={faqItems}
         isSoftwareApp
@@ -45,7 +45,7 @@ export default function Home() {
             Cotisations URSSAF, impôts, CFE : on calcule tout pour vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-10">
-            {['✓ Taux 2025 & 2026', '✓ Sans inscription', '✓ 100% gratuit'].map((badge) => (
+            {['✓ Taux 2026 officiel', '✓ Sans inscription', '✓ 100% gratuit'].map((badge) => (
               <span
                 key={badge}
                 className="font-corps text-sm text-blue-100 px-4 py-2 rounded-full"
@@ -185,9 +185,12 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="font-titre font-bold text-bleu-marine text-3xl mb-8">Guides et articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {articles.slice(0, 6).map((a) => (
-            <ArticleCard key={a.slug} {...a} />
-          ))}
+          {[...articles]
+            .sort((a, b) => b.dateModified.localeCompare(a.dateModified))
+            .slice(0, 6)
+            .map((a) => (
+              <ArticleCard key={a.slug} {...a} />
+            ))}
         </div>
         <div className="text-center mt-8">
           <Link to="/guide" className="inline-block font-corps font-medium text-bleu-marine hover:text-bleu-moyen transition-colors border-b border-bleu-marine/30 hover:border-bleu-moyen">

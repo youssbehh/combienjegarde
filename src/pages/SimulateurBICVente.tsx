@@ -9,9 +9,10 @@ import PDFExportButton from '../components/simulateur/PDFExportButton';
 import StepSecteur from '../components/simulateur/StepSecteur';
 
 const faq = [
-  { question: 'Quel est le taux de cotisations en BIC Vente ?', answer: 'En 2025, le taux est de 12,3% du CA pour le commerce, e-commerce et l\'artisanat.' },
-  { question: 'Pourquoi l\'abattement est-il si élevé en BIC Vente ?', answer: 'L\'abattement de 71% en BIC vente reflète les coûts d\'achat de marchandises, qui sont très importants dans le commerce. Votre revenu imposable n\'est que 29% de votre CA.' },
-  { question: 'Quel est le seuil de CA pour le BIC Vente ?', answer: 'Le plafond de CA annuel pour rester auto-entrepreneur en BIC vente est de 188 700 € (2025). La franchise TVA commence à 85 000 €.' },
+  { question: 'Quel est le taux de cotisations en BIC Vente en 2026 ?', answer: 'En 2026, le taux est de 12,3% du CA pour le commerce, e-commerce et l\'artisanat — inchangé par rapport à 2025.' },
+  { question: 'Pourquoi l\'abattement est-il si élevé en BIC Vente ?', answer: 'L\'abattement de 71% en BIC vente reflète les coûts d\'achat de marchandises, très importants dans le commerce. Votre revenu imposable n\'est que 29% de votre CA.' },
+  { question: 'Quel est le seuil de CA pour le BIC Vente en 2026 ?', answer: 'Le plafond de CA annuel pour rester auto-entrepreneur en BIC vente est de 188 700 € en 2026. La franchise TVA commence à 85 000 €.' },
+  { question: 'Le taux BIC Vente change-t-il en 2026 ?', answer: 'Non. Le taux de cotisations BIC Vente reste à 12,3% en 2026. Seul le taux BNC a augmenté (+1,5 pt) dans le cadre de la réforme des retraites libéraux.' },
 ];
 
 export default function SimulateurBICVente() {
@@ -25,8 +26,8 @@ export default function SimulateurBICVente() {
   return (
     <>
       <SEOHead
-        title="Simulateur revenu net BIC Vente 2025 — Commerce, e-commerce, artisanat"
-        description="Calculez votre revenu net en BIC Vente (commerce) après cotisations URSSAF (12,3%). Abattement 71%, taux officiels 2025."
+        title="Simulateur revenu net BIC Vente 2026 — Commerce, e-commerce, artisanat"
+        description="Calculez votre revenu net en BIC Vente (commerce) après cotisations URSSAF (12,3%). Abattement 71%, taux officiels 2026."
         canonical="/simulateur-bic-vente"
         faqItems={faq}
       />
@@ -34,10 +35,10 @@ export default function SimulateurBICVente() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-10">
           <h1 className="font-titre font-extrabold text-bleu-marine text-3xl mb-4">
-            Simulateur de revenu net BIC Vente 2025
+            Simulateur de revenu net BIC Vente 2026
           </h1>
           <p className="font-corps text-gris-moyen leading-relaxed max-w-2xl">
-            Commerce, e-commerce, artisanat, vente en ligne ? En BIC Vente, vous bénéficiez du taux de cotisations le plus bas : <strong>12,3%</strong>, et de l'abattement forfaitaire le plus élevé : <strong>71%</strong>.
+            Commerce, e-commerce, artisanat, vente en ligne ? En BIC Vente, vous bénéficiez du taux de cotisations le plus bas : <strong>12,3%</strong> (inchangé en 2026), et de l'abattement forfaitaire le plus élevé : <strong>71%</strong>.
           </p>
         </div>
 
