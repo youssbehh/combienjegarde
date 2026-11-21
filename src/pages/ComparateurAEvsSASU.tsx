@@ -121,7 +121,7 @@ export default function ComparateurAEvsSASU() {
           </div>
 
           <p className="mt-4 font-corps text-xs text-gris-moyen leading-relaxed">
-            ⚠️ Estimation simplifiée : en SASU, le salaire net est estimé à {HYPOTHESES_COMPARATIF.sasu_ratio_net_sur_cout * 100} % du coût total employeur, sans dividendes. Le résultat réel dépend de la rémunération choisie, de vos frais, de votre quotient familial et de vos autres revenus. Consultez un expert-comptable pour votre cas.
+            ⚠️ Estimation simplifiée : en SASU, le salaire net est estimé à {Math.round(HYPOTHESES_COMPARATIF.sasu_ratio_net_sur_cout * 100)} % du coût total employeur, sans dividendes. Le résultat réel dépend de la rémunération choisie, de vos frais, de votre quotient familial et de vos autres revenus. Consultez un expert-comptable pour votre cas.
           </p>
 
           <Link

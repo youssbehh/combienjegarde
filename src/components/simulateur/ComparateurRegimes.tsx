@@ -88,7 +88,7 @@ export default function ComparateurRegimes({ comparatif, caAnnuel }: Props) {
       </div>
 
       <p className="mt-4 font-corps text-xs text-gris-moyen leading-relaxed">
-        Ordres de grandeur. SASU : {HYPOTHESES_COMPARATIF.sasu_frais_fixes_annuels.toLocaleString('fr-FR')} € de frais fixes par an, tout le reste versé en salaire au président (net ≈ {HYPOTHESES_COMPARATIF.sasu_ratio_net_sur_cout * 100} % du coût total), sans dividendes ni frais déductibles. Portage : {HYPOTHESES_COMPARATIF.portage_frais_gestion * 100} % de frais de gestion.{' '}
+        Ordres de grandeur. SASU : {HYPOTHESES_COMPARATIF.sasu_frais_fixes_annuels.toLocaleString('fr-FR')} € de frais fixes par an, tout le reste versé en salaire au président (net ≈ {Math.round(HYPOTHESES_COMPARATIF.sasu_ratio_net_sur_cout * 100)} % du coût total), sans dividendes ni frais déductibles. Portage : {Math.round(HYPOTHESES_COMPARATIF.portage_frais_gestion * 100)} % de frais de gestion.{' '}
         <Link to="/comparateur/ae-vs-sasu" className="underline text-bleu-marine">Voir le comparatif détaillé</Link>
       </p>
     </div>

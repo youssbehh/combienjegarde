@@ -118,7 +118,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
               className="font-corps text-sm rounded-full px-3 py-1"
               style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', fontSize: '14px' }}
             >
-              Taux de prélèvement : <strong>{tauxPrelevement} %</strong>
+              Taux de prélèvement : <strong>{tauxPrelevement.toLocaleString('fr-FR')} %</strong>
             </span>
           </div>
         </div>

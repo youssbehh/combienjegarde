@@ -124,7 +124,7 @@ export default function StepFiscal() {
               </div>
             )}
             <p className="text-xs font-corps leading-relaxed text-vert-fonce">
-              Cotisations sociales réduites de <strong>{acreReduction * 100} %</strong>. La CFE n'est pas due l'année de création, elle est donc comptée à 0 €.
+              Cotisations sociales réduites de <strong>{Math.round(acreReduction * 100)} %</strong>. La CFE n'est pas due l'année de création, elle est donc comptée à 0 €.
             </p>
           </div>
         )}
