@@ -1,18 +1,16 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import type { ResultatSimulation } from '../../types';
 
-const COLORS = ['#E63946', '#FF9F1C', '#6C757D', '#2EC4B6'];
-
 interface Props {
   resultats: ResultatSimulation;
 }
 
 export default function DonutChart({ resultats }: Props) {
   const data = [
-    { name: 'Cotisations', value: resultats.cotisationsURSSAF },
-    { name: 'Impôt',       value: resultats.impotEstime },
-    { name: 'CFE',         value: resultats.cfeEstimee },
-    { name: 'Net',         value: resultats.revenuNet },
+    { name: 'Cotisations', value: resultats.cotisationsURSSAF, couleur: '#E63946' },
+    { name: 'Impôt',       value: resultats.impotEstime, couleur: '#FF9F1C' },
+    { name: 'CFE',         value: resultats.cfeEstimee, couleur: '#6C757D' },
+    { name: 'Net',         value: resultats.revenuNet, couleur: '#2EC4B6' },
   ].filter((d) => d.value > 0);
 
   const total = resultats.cabrut;
@@ -33,10 +31,10 @@ export default function DonutChart({ resultats }: Props) {
 
   const CenterLabel = () => (
     <g>
-      <text x="50%" y="44%" textAnchor="middle" dominantBaseline="middle" className="fill-gris-fonce" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 700, fontSize: '13px', fill: '#6C757D' }}>
+      <text x="50%" y="44%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: 'var(--font-titre)', fontWeight: 700, fontSize: '13px', fill: '#6C757D' }}>
         Revenu net
       </text>
-      <text x="50%" y="56%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 800, fontSize: '18px', fill: '#2EC4B6' }}>
+      <text x="50%" y="56%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: 'var(--font-titre)', fontWeight: 800, fontSize: '18px', fill: '#1A9E92' }}>
         {resultats.revenuNet.toLocaleString('fr-FR')} €
       </text>
     </g>
@@ -59,8 +57,8 @@ export default function DonutChart({ resultats }: Props) {
             animationDuration={400}
             label={false}
           >
-            {data.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            {data.map((part) => (
+              <Cell key={part.name} fill={part.couleur} />
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />

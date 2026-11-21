@@ -33,6 +33,8 @@ interface Props {
 
 export default function ResultCard({ resultats, onRecommencer, onReset }: Props) {
   const { cabrut, cotisationsURSSAF, impotEstime, cfeEstimee, revenuNet, tauxPrelevement, acreApplique } = resultats;
+  const acrePct = Math.round((resultats.acreReduction ?? 0.5) * 100);
+  const formationPro = resultats.formationPro ?? 0;
   const { secteur } = useSimulateurStore();
 
   const taux = TAUX_PAR_ANNEE[resultats.annee];
@@ -57,7 +59,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
               className="font-corps text-xs font-bold px-3 py-1 rounded-full"
               style={{ background: 'rgba(46,196,182,0.25)', color: '#7EEEE8' }}
             >
-              ACRE activée — cotisations −50% + CFE = 0 €
+              ACRE activée — cotisations −{acrePct} % · pas de CFE l'année de création
             </span>
           </div>
         )}
@@ -74,21 +76,22 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
         <div className="flex flex-col gap-3 mb-6">
           <div className="flex justify-between items-center">
             <span className="font-corps text-sm text-blue-200">
-              Cotisations URSSAF{acreApplique ? ' (−50% ACRE)' : ''}
+              Cotisations URSSAF{acreApplique ? ` (−${acrePct} % ACRE)` : ''}
+              {formationPro > 0 && <span className="block text-xs text-blue-300">dont formation professionnelle : {formationPro.toLocaleString('fr-FR')} €</span>}
             </span>
-            <span className="font-titre font-semibold" style={{ color: '#E63946' }}>
+            <span className="font-titre font-semibold" style={{ color: '#FF8A93' }}>
               − <AnimatedNumber value={cotisationsURSSAF} suffix=" €" />
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="font-corps text-sm text-blue-200">Impôt estimé</span>
+            <span className="font-corps text-sm text-blue-200">Impôt sur le revenu lié à l'activité (estimé)</span>
             <span className="font-titre font-semibold" style={{ color: '#FF9F1C' }}>
               − <AnimatedNumber value={impotEstime} suffix=" €" />
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="font-corps text-sm text-blue-200">
-              CFE (estimée/mois){acreApplique ? ' — exonérée' : ''}
+              CFE (estimation lissée/mois){acreApplique ? ' — non due la 1re année' : ''}
             </span>
             <span className="font-titre font-semibold text-blue-300">
               − <AnimatedNumber value={cfeEstimee} suffix=" €" />
@@ -99,7 +102,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
         {/* Revenu net */}
         <div className="pt-6 border-t border-white/20">
           <div className="flex justify-between items-center mb-3">
-            <span className="font-corps font-medium text-blue-100">Revenu net réel</span>
+            <span className="font-corps font-medium text-blue-100">Revenu net estimé</span>
             <div className="text-right">
               <p
                 className="font-titre font-extrabold animate-pulse-green"
@@ -122,7 +125,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
 
         {/* Note légale */}
         <p className="mt-6 text-xs text-blue-300 font-corps leading-relaxed">
-          Estimation basée sur les taux officiels {resultats.annee}. Non contractuel. Consultez un expert-comptable pour votre situation précise.
+          Estimation basée sur les taux officiels {resultats.annee} et le dernier barème de l'impôt connu. La CFE varie selon la commune ; le plafonnement du quotient familial n'est pas pris en compte. Non contractuel : consultez un expert-comptable pour votre situation précise.
         </p>
 
         <div className="mt-4 flex gap-4">
@@ -155,7 +158,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
           </strong>
           <p className="mt-1 text-gris-fonce">
             {caAnnuel > plafondCA
-              ? `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) dépasse le plafond du régime auto-entrepreneur (${plafondCA.toLocaleString('fr-FR')} €). Au-delà, vous basculez au régime réel.`
+              ? `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) dépasse le plafond du régime micro-entrepreneur (${plafondCA.toLocaleString('fr-FR')} €). Après deux années consécutives de dépassement, vous basculez au régime réel.`
               : `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) approche du plafond micro-entrepreneur (${plafondCA.toLocaleString('fr-FR')} €). Anticipez un éventuel changement de régime.`
             }
           </p>
@@ -176,7 +179,7 @@ export default function ResultCard({ resultats, onRecommencer, onReset }: Props)
           </strong>
           <p className="mt-1 text-gris-fonce">
             {pctDuSeuil >= 1
-              ? `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) dépasse le seuil de franchise TVA de ${seuilTVA.toLocaleString('fr-FR')} €. Vous devez facturer la TVA dès le 1er jour du mois de dépassement.`
+              ? `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) dépasse le seuil de franchise TVA de ${seuilTVA.toLocaleString('fr-FR')} €. Au-delà du seuil majoré, la TVA s'applique dès le jour du dépassement ; sinon à partir du 1er janvier suivant.`
               : `Votre CA annuel estimé (${caAnnuel.toLocaleString('fr-FR')} €) approche du seuil de franchise TVA (${seuilTVA.toLocaleString('fr-FR')} €). Anticipez vos obligations TVA.`
             }
           </p>

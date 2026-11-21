@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSimulateurStore } from '../../store/simulateurStore';
 import type { Secteur } from '../../types';
+import { TAUX_PAR_ANNEE, formatTaux } from '../../lib/constants';
 import type { AnneeFiscale } from '../../lib/constants';
 
 const MOIS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
 const secteurs: { id: Secteur; emoji: string; label: string; desc: string }[] = [
-  { id: 'bic_vente',    emoji: '🛒', label: 'BIC Vente',     desc: 'Commerce, e-commerce, artisanat' },
-  { id: 'bic_services', emoji: '💼', label: 'BIC Services',  desc: 'Conseil, formation, agence' },
-  { id: 'bnc',          emoji: '📝', label: 'BNC / Libéral', desc: 'Dev, designer, consultant, médical' },
+  { id: 'bic_vente',    emoji: '🛒', label: 'BIC Vente',     desc: 'Commerce, e-commerce, vente de marchandises' },
+  { id: 'bic_services', emoji: '💼', label: 'BIC Services',  desc: 'Prestations commerciales et artisanales' },
+  { id: 'bnc',          emoji: '📝', label: 'BNC / Libéral', desc: 'Dev, designer, consultant, formation' },
 ];
 
 export default function StepSecteur() {
@@ -17,6 +19,7 @@ export default function StepSecteur() {
   const [caMode, setCaMode] = useState<'fixe' | 'variable'>('fixe');
   const [moisCA, setMoisCA] = useState<number[]>(Array(12).fill(ca));
 
+  const taux = TAUX_PAR_ANNEE[annee];
   const isBNC = secteur === 'bnc' || secteur === 'bnc_cipav';
   const displayCA = mode === 'annuel' ? ca * 12 : ca;
 
@@ -34,10 +37,10 @@ export default function StepSecteur() {
 
   const moyenneCA = Math.round(moisCA.reduce((s, v) => s + v, 0) / 12);
 
-  // BIC Vente plafond 188 700€/an (~15 700/mois) — les autres à 77 700€/an
+  // Le curseur va un peu au-delà du plafond du secteur pour montrer l'alerte de dépassement
   const isBICVente = secteur === 'bic_vente';
   const sliderMin = mode === 'annuel' ? 6000 : 500;
-  const sliderMax = mode === 'annuel' ? (isBICVente ? 180000 : 120000) : (isBICVente ? 15000 : 10000);
+  const sliderMax = mode === 'annuel' ? (isBICVente ? 216000 : 120000) : (isBICVente ? 18000 : 10000);
   const sliderStep = mode === 'annuel' ? (isBICVente ? 6000 : 1200) : (isBICVente ? 500 : 100);
 
   const handleNext = () => {
@@ -57,14 +60,12 @@ export default function StepSecteur() {
               <button
                 key={a}
                 onClick={() => setAnnee(a)}
+                aria-pressed={annee === a}
                 className={`px-4 py-1.5 text-sm font-titre font-bold transition-colors ${
                   annee === a ? 'bg-bleu-marine text-white' : 'bg-white text-gris-moyen hover:bg-blanc-casse'
                 }`}
               >
                 {a}
-                {a === 2026 && annee === a && (
-                  <span className="ml-1.5 text-xs bg-vert-menthe text-white rounded-full px-1.5 py-0.5">Nouveau</span>
-                )}
               </button>
             ))}
           </div>
@@ -76,7 +77,7 @@ export default function StepSecteur() {
           className="mb-5 p-3 rounded-xl font-corps text-xs leading-relaxed"
           style={{ background: 'rgba(46,196,182,0.08)', border: '1px solid rgba(46,196,182,0.3)' }}
         >
-          <strong className="text-vert-fonce">Taux 2026 actifs</strong> — Barème IR revalorisé (+1,8%), cotisations BNC à 24,6% (réforme retraites libéraux). <a href="/guide/changements-2026" className="underline text-bleu-marine">Voir tous les changements →</a>
+          <strong className="text-vert-fonce">Taux 2026 actifs</strong> — Cotisations BNC à {formatTaux(TAUX_PAR_ANNEE[2026].cotisations.bnc)}, plafonds de CA relevés ({TAUX_PAR_ANNEE[2026].plafonds_ca.bnc.toLocaleString('fr-FR')} € et {TAUX_PAR_ANNEE[2026].plafonds_ca.bic_vente.toLocaleString('fr-FR')} €), barème de l'impôt revalorisé de 0,9 %. <Link to="/guide/changements-2026" className="underline text-bleu-marine">Voir tous les changements →</Link>
         </div>
       )}
 
@@ -88,7 +89,8 @@ export default function StepSecteur() {
             <button
               key={s.id}
               onClick={() => setSecteur(s.id)}
-              className="text-left p-4 rounded-card transition-all duration-200 focus:outline-none"
+              aria-pressed={selected}
+              className="text-left p-4 rounded-card transition-all duration-200"
               style={{
                 border: selected ? '2px solid #1B2D6B' : '2px solid #E9ECEF',
                 background: selected ? 'rgba(27, 45, 107, 0.05)' : '#FFFFFF',
@@ -112,6 +114,7 @@ export default function StepSecteur() {
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setSecteur('bnc')}
+              aria-pressed={secteur === 'bnc'}
               className="p-3 rounded-xl text-left transition-all"
               style={{
                 border: secteur === 'bnc' ? '2px solid #1B2D6B' : '2px solid #E9ECEF',
@@ -121,11 +124,12 @@ export default function StepSecteur() {
               <span className="font-titre font-semibold text-sm text-bleu-marine block">SSI (non réglementé)</span>
               <span className="font-corps text-xs text-gris-moyen">Dev, designer, consultant…</span>
               <span className="font-corps text-xs font-bold mt-1 block" style={{ color: '#1A9E92' }}>
-                {annee === 2026 ? '24,6%' : '23,1%'} de cotisations
+                {formatTaux(taux.cotisations.bnc)} de cotisations
               </span>
             </button>
             <button
               onClick={() => setSecteur('bnc_cipav')}
+              aria-pressed={secteur === 'bnc_cipav'}
               className="p-3 rounded-xl text-left transition-all"
               style={{
                 border: secteur === 'bnc_cipav' ? '2px solid #1B2D6B' : '2px solid #E9ECEF',
@@ -133,9 +137,9 @@ export default function StepSecteur() {
               }}
             >
               <span className="font-titre font-semibold text-sm text-bleu-marine block">CIPAV (réglementé)</span>
-              <span className="font-corps text-xs text-gris-moyen">Médecin, avocat, architecte…</span>
+              <span className="font-corps text-xs text-gris-moyen">Architecte, ostéopathe, psychologue…</span>
               <span className="font-corps text-xs font-bold mt-1 block" style={{ color: '#1A9E92' }}>
-                {annee === 2026 ? '24,7%' : '23,2%'} de cotisations
+                {formatTaux(taux.cotisations.bnc_cipav)} de cotisations
               </span>
             </button>
           </div>
@@ -150,6 +154,7 @@ export default function StepSecteur() {
             <button
               key={m}
               onClick={() => setMode(m)}
+              aria-pressed={mode === m}
               className={`px-4 py-1.5 text-sm font-corps font-medium transition-colors ${
                 mode === m ? 'bg-bleu-marine text-white' : 'bg-white text-gris-moyen hover:bg-blanc-casse'
               }`}
@@ -166,6 +171,7 @@ export default function StepSecteur() {
                 setCaMode(m);
                 if (m === 'variable') setMoisCA(Array(12).fill(ca));
               }}
+              aria-pressed={caMode === m}
               className={`px-3 py-1.5 text-sm font-corps font-medium transition-colors ${
                 caMode === m ? 'bg-bleu-marine text-white' : 'bg-white text-gris-moyen hover:bg-blanc-casse'
               }`}
@@ -187,6 +193,7 @@ export default function StepSecteur() {
 
           <input
             type="range"
+            aria-label={`Chiffre d'affaires ${mode}`}
             min={sliderMin}
             max={sliderMax}
             step={sliderStep}
@@ -206,14 +213,15 @@ export default function StepSecteur() {
           <div className="grid grid-cols-3 md:grid-cols-4 gap-2 mb-4">
             {MOIS.map((nom, i) => (
               <div key={nom} className="flex flex-col gap-1">
-                <label className="font-corps text-xs text-gris-moyen text-center">{nom}</label>
+                <label htmlFor={`ca-mois-${i}`} className="font-corps text-xs text-gris-moyen text-center">{nom}</label>
                 <input
+                  id={`ca-mois-${i}`}
                   type="number"
                   min={0}
                   step={100}
                   value={moisCA[i]}
                   onChange={(e) => handleMoisChange(i, Number(e.target.value))}
-                  className="w-full px-2 py-1.5 rounded-lg font-corps text-sm text-bleu-marine text-center focus:outline-none"
+                  className="w-full px-2 py-1.5 rounded-lg font-corps text-sm text-bleu-marine text-center"
                   style={{ border: '1.5px solid #E9ECEF' }}
                 />
               </div>
@@ -223,7 +231,7 @@ export default function StepSecteur() {
             className="flex items-center justify-between p-3 rounded-xl"
             style={{ background: 'rgba(27,45,107,0.05)' }}
           >
-            <span className="font-corps text-sm text-gris-fonce">Moyenne mensuelle utilisée</span>
+            <span className="font-corps text-sm text-gris-fonce">Moyenne mensuelle utilisée pour le calcul</span>
             <span className="font-titre font-bold text-bleu-marine text-lg">
               {moyenneCA.toLocaleString('fr-FR')} €/mois
             </span>
@@ -233,12 +241,10 @@ export default function StepSecteur() {
 
       <button
         onClick={handleNext}
-        className="w-full md:w-auto font-titre font-bold text-white rounded-xl px-7 py-3.5 transition-all duration-200 hover:-translate-y-0.5"
-        style={{ background: '#1B2D6B', fontSize: '16px' }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = '#2A4494')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = '#1B2D6B')}
+        className="w-full md:w-auto font-titre font-bold text-white rounded-xl px-7 py-3.5 transition-all duration-200 hover:-translate-y-0.5 bg-bleu-marine hover:bg-bleu-moyen"
+        style={{ fontSize: '16px' }}
       >
-        Voir mon revenu net →
+        Continuer →
       </button>
     </div>
   );

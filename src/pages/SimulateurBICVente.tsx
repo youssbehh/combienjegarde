@@ -1,75 +1,32 @@
-import { useEffect } from 'react';
-import SEOHead from '../components/layout/SEOHead';
-import { useSimulateurStore } from '../store/simulateurStore';
-import StepFiscal from '../components/simulateur/StepFiscal';
-import ResultCard from '../components/simulateur/ResultCard';
-import DonutChart from '../components/simulateur/DonutChart';
-import ComparateurRegimes from '../components/simulateur/ComparateurRegimes';
-import PDFExportButton from '../components/simulateur/PDFExportButton';
-import StepSecteur from '../components/simulateur/StepSecteur';
+import SimulateurSecteurPage from '../components/simulateur/SimulateurSecteurPage';
+import { ANNEE_COURANTE, TAUX_PAR_ANNEE, formatTaux } from '../lib/constants';
+
+const taux = TAUX_PAR_ANNEE[ANNEE_COURANTE];
+const tauxVente = formatTaux(taux.cotisations.bic_vente);
+const plafond = taux.plafonds_ca.bic_vente.toLocaleString('fr-FR');
+const seuilTVA = taux.seuils_tva.bic_vente.toLocaleString('fr-FR');
 
 const faq = [
-  { question: 'Quel est le taux de cotisations en BIC Vente en 2026 ?', answer: 'En 2026, le taux est de 12,3% du CA pour le commerce, e-commerce et l\'artisanat — inchangé par rapport à 2025.' },
-  { question: 'Pourquoi l\'abattement est-il si élevé en BIC Vente ?', answer: 'L\'abattement de 71% en BIC vente reflète les coûts d\'achat de marchandises, très importants dans le commerce. Votre revenu imposable n\'est que 29% de votre CA.' },
-  { question: 'Quel est le seuil de CA pour le BIC Vente en 2026 ?', answer: 'Le plafond de CA annuel pour rester auto-entrepreneur en BIC vente est de 188 700 € en 2026. La franchise TVA commence à 85 000 €.' },
-  { question: 'Le taux BIC Vente change-t-il en 2026 ?', answer: 'Non. Le taux de cotisations BIC Vente reste à 12,3% en 2026. Seul le taux BNC a augmenté (+1,5 pt) dans le cadre de la réforme des retraites libéraux.' },
+  { question: `Quel est le taux de cotisations en BIC Vente en ${ANNEE_COURANTE} ?`, answer: `En ${ANNEE_COURANTE}, le taux est de ${tauxVente} du chiffre d'affaires pour le commerce, l'e-commerce et la vente de marchandises — inchangé par rapport à 2025. S'y ajoute la contribution à la formation professionnelle (0,1 %).` },
+  { question: "Pourquoi l'abattement est-il si élevé en BIC Vente ?", answer: "L'abattement de 71 % reflète le coût d'achat des marchandises, très important dans le commerce. Votre revenu imposable n'est que de 29 % de votre chiffre d'affaires." },
+  { question: `Quel est le plafond de chiffre d'affaires en BIC Vente en ${ANNEE_COURANTE} ?`, answer: `Le plafond annuel pour rester micro-entrepreneur en vente de marchandises est de ${plafond} € en ${ANNEE_COURANTE} (188 700 € jusqu'en 2025). La franchise de TVA s'applique jusqu'à ${seuilTVA} €.` },
+  { question: `Le taux BIC Vente change-t-il en ${ANNEE_COURANTE} ?`, answer: `Non, il reste à ${tauxVente}. Seul le taux des professions libérales non réglementées (BNC) a augmenté.` },
 ];
 
 export default function SimulateurBICVente() {
-  const { setSecteur, step, resultats, comparatif, ca, secteur, reset, recommencer, setStep } = useSimulateurStore();
-
-  useEffect(() => {
-    setSecteur('bic_vente');
-    setStep(1);
-  }, [setSecteur, setStep]);
-
   return (
-    <>
-      <SEOHead
-        title="Simulateur revenu net BIC Vente 2026 — Commerce, e-commerce, artisanat"
-        description="Calculez votre revenu net en BIC Vente (commerce) après cotisations URSSAF (12,3%). Abattement 71%, taux officiels 2026."
-        canonical="/simulateur-bic-vente"
-        faqItems={faq}
-      />
-
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="mb-10">
-          <h1 className="font-titre font-extrabold text-bleu-marine text-3xl mb-4">
-            Simulateur de revenu net BIC Vente 2026
-          </h1>
-          <p className="font-corps text-gris-moyen leading-relaxed max-w-2xl">
-            Commerce, e-commerce, artisanat, vente en ligne ? En BIC Vente, vous bénéficiez du taux de cotisations le plus bas : <strong>12,3%</strong> (inchangé en 2026), et de l'abattement forfaitaire le plus élevé : <strong>71%</strong>.
-          </p>
-        </div>
-
-        <div className="bg-white rounded-card shadow-card p-8 mb-12">
-          {step === 1 && <StepSecteur />}
-          {step === 2 && <StepFiscal />}
-          {step === 3 && resultats && comparatif && (
-            <div className="flex flex-col gap-8">
-              <ResultCard resultats={resultats} onRecommencer={recommencer} onReset={reset} />
-              <DonutChart resultats={resultats} />
-              <ComparateurRegimes comparatif={comparatif} caAnnuel={ca * 12} />
-              <PDFExportButton resultats={resultats} comparatif={comparatif} secteur={secteur} />
-            </div>
-          )}
-        </div>
-
-        <section>
-          <h2 className="font-titre font-bold text-bleu-marine text-2xl mb-6">Questions fréquentes</h2>
-          <div className="flex flex-col gap-3">
-            {faq.map((item) => (
-              <details key={item.question} className="bg-white rounded-card shadow-card group">
-                <summary className="p-5 font-titre font-semibold text-bleu-marine cursor-pointer list-none flex justify-between items-center">
-                  {item.question}
-                  <span className="text-vert-menthe font-bold group-open:rotate-45 transition-transform">+</span>
-                </summary>
-                <p className="px-5 pb-5 font-corps text-sm text-gris-fonce leading-relaxed">{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      </div>
-    </>
+    <SimulateurSecteurPage
+      secteur="bic_vente"
+      canonical="/simulateur-bic-vente"
+      seoTitle={`Simulateur revenu net BIC Vente ${ANNEE_COURANTE} — Commerce, e-commerce, artisanat`}
+      seoDescription={`Calculez votre revenu net en BIC Vente (commerce) après cotisations URSSAF (${tauxVente}). Abattement de 71 %, taux officiels ${ANNEE_COURANTE}.`}
+      h1={`Simulateur de revenu net BIC Vente ${ANNEE_COURANTE}`}
+      intro={
+        <>
+          Commerce, e-commerce, vente en ligne ? En BIC Vente, vous bénéficiez du taux de cotisations le plus bas : <strong>{tauxVente}</strong> (inchangé en {ANNEE_COURANTE}), et de l'abattement forfaitaire le plus élevé : <strong>71 %</strong>.
+        </>
+      }
+      faq={faq}
+    />
   );
 }

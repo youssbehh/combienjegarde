@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { SITE_NAME, SITE_URL } from '../../lib/site';
 
 interface SEOHeadProps {
   title: string;
@@ -10,7 +11,13 @@ interface SEOHeadProps {
   dateModified?: string;
   faqItems?: { question: string; answer: string }[];
   isSoftwareApp?: boolean;
+  noindex?: boolean;
 }
+
+const LIBELLES_FIL_ARIANE: Record<string, string> = {
+  guide: 'Guide',
+  comparateur: 'Comparateur',
+};
 
 export default function SEOHead({
   title,
@@ -22,20 +29,24 @@ export default function SEOHead({
   dateModified,
   faqItems,
   isSoftwareApp,
+  noindex,
 }: SEOHeadProps) {
-  const fullTitle = `${title} | CombienJeGarde.fr`;
-  const baseUrl = 'https://combienjeGarde.fr';
-  const canonicalUrl = `${baseUrl}${canonical}`;
+  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const canonicalUrl = `${SITE_URL}${canonical === '/' ? '/' : canonical}`;
+  const ogImageUrl = `${SITE_URL}${ogImage}`;
 
-  const breadcrumbParts = canonical.split('/').filter(Boolean);
+  const segments = canonical.split('/').filter(Boolean);
   const breadcrumbItems = [
-    { '@type': 'ListItem', position: 1, name: 'Accueil', item: baseUrl },
-    ...breadcrumbParts.map((part, i) => ({
-      '@type': 'ListItem',
-      position: i + 2,
-      name: part.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      item: `${baseUrl}/${breadcrumbParts.slice(0, i + 1).join('/')}`,
-    })),
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+    ...segments.map((segment, i) => {
+      const estDernier = i === segments.length - 1;
+      return {
+        '@type': 'ListItem',
+        position: i + 2,
+        name: estDernier ? title : (LIBELLES_FIL_ARIANE[segment] ?? segment),
+        item: `${SITE_URL}/${segments.slice(0, i + 1).join('/')}`,
+      };
+    }),
   ];
 
   return (
@@ -43,21 +54,24 @@ export default function SEOHead({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
+      {noindex && <meta name="robots" content="noindex" />}
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={`${baseUrl}${ogImage}`} />
+      <meta property="og:image" content={ogImageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:locale" content="fr_FR" />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:site_name" content="CombienJeGarde.fr" />
+      <meta property="og:site_name" content={SITE_NAME} />
 
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={`${baseUrl}${ogImage}`} />
+      <meta name="twitter:image" content={ogImageUrl} />
 
       {/* Article dates */}
       {datePublished && <meta property="article:published_time" content={datePublished} />}
@@ -72,8 +86,9 @@ export default function SEOHead({
           description,
           datePublished,
           dateModified,
-          publisher: { '@type': 'Organization', name: 'CombienJeGarde.fr', url: baseUrl },
-          url: canonicalUrl,
+          image: ogImageUrl,
+          publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+          mainEntityOfPage: canonicalUrl,
         })}</script>
       )}
 
@@ -91,7 +106,7 @@ export default function SEOHead({
       )}
 
       {/* JSON-LD Breadcrumb */}
-      {breadcrumbParts.length > 0 && (
+      {segments.length > 0 && (
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'BreadcrumbList',
@@ -99,37 +114,28 @@ export default function SEOHead({
         })}</script>
       )}
 
-      {/* JSON-LD SoftwareApplication */}
+      {/* JSON-LD WebApplication : le simulateur lui-même est gratuit */}
       {isSoftwareApp && (
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
-          '@type': 'SoftwareApplication',
-          name: 'CombienJeGarde.fr',
+          '@type': 'WebApplication',
+          name: SITE_NAME,
+          url: SITE_URL,
           applicationCategory: 'FinanceApplication',
           operatingSystem: 'Web',
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'EUR',
-            description: 'Simulation gratuite — Export PDF 4,90€',
-          },
-          description: 'Simulateur de revenu net pour auto-entrepreneurs français. Calculez vos cotisations URSSAF, impôts et revenu net en temps réel.',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+          description: 'Simulateur de revenu net pour auto-entrepreneurs français : cotisations URSSAF, impôt sur le revenu et CFE.',
           inLanguage: 'fr-FR',
         })}</script>
       )}
 
-      {/* JSON-LD WebSite with SearchAction */}
       {isSoftwareApp && (
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          name: 'CombienJeGarde.fr',
-          url: baseUrl,
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: `${baseUrl}/guide?q={search_term_string}`,
-            'query-input': 'required name=search_term_string',
-          },
+          name: SITE_NAME,
+          url: SITE_URL,
+          inLanguage: 'fr-FR',
         })}</script>
       )}
     </Helmet>

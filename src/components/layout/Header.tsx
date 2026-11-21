@@ -9,7 +9,7 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-3">
           <span className="font-titre font-bold text-xl text-bleu-marine">
-            CombienJeGarde<span className="text-vert-menthe">.fr</span>
+            CombienJeGarde<span className="text-vert-fonce">.fr</span>
           </span>
           <span className="hidden md:block text-sm text-gris-moyen font-corps">
             Votre CA en brut. Votre vie en net.
@@ -17,7 +17,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav aria-label="Navigation principale" className="hidden md:flex items-center gap-8">
           <NavLink
             to="/"
             end
@@ -48,8 +48,11 @@ export default function Header() {
         {/* Mobile hamburger */}
         <button
           className="md:hidden flex flex-col gap-1.5 p-2"
+          type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menu"
+          aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={menuOpen}
+          aria-controls="menu-mobile"
         >
           <span className={`block w-6 h-0.5 bg-bleu-marine transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
           <span className={`block w-6 h-0.5 bg-bleu-marine transition-all ${menuOpen ? 'opacity-0' : ''}`} />
@@ -59,7 +62,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <nav className="md:hidden bg-white border-t border-gris-clair px-6 py-4 flex flex-col gap-4">
+        <nav id="menu-mobile" aria-label="Navigation principale" className="md:hidden bg-white border-t border-gris-clair px-6 py-4 flex flex-col gap-4">
           <NavLink to="/" end onClick={() => setMenuOpen(false)} className="font-corps font-medium text-gris-fonce hover:text-bleu-marine">
             Simulateur
           </NavLink>
