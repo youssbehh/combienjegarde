@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import jsPDF from 'jspdf';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import type { jsPDF } from 'jspdf';
 import type { ResultatSimulation, ResultatComparatif, Secteur } from '../../types';
-import { TAUX_PAR_ANNEE } from '../../lib/constants';
+import { TAUX_PAR_ANNEE, formatTaux } from '../../lib/constants';
+import { CONTACT_EMAIL, PAIEMENT_ACTIF, PRIX_PDF, STRIPE_PAYMENT_LINK } from '../../lib/site';
 import type { AnneeFiscale } from '../../lib/constants';
-
-// ✅ COLLE TON LIEN STRIPE ICI après l'avoir créé dans le Dashboard
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_fZubJ15rA9kmc9Aa7f9R600';
 
 const STORAGE_KEY = 'cjg_pending_pdf';
 
@@ -30,32 +29,32 @@ const secteurLabels: Record<Secteur, string> = {
 
 const conseils: Record<Secteur, string[]> = {
   bnc_cipav: [
-    "Vos cotisations CIPAV (24,7% en 2026) couvrent votre retraite de base et complémentaire CIPAV — vérifiez votre relevé de points chaque année.",
+    "Vos cotisations CIPAV (23,2 %) couvrent votre retraite de base et complémentaire CIPAV — vérifiez votre relevé de points chaque année.",
     "Provisionnez 30-35% de chaque encaissement pour charges sociales et fiscales.",
-    "Surveillez votre seuil TVA annuel (37 500 €) : le dépassement impose la TVA dès le 1er jour du mois concerné.",
-    "Optez pour le prélèvement libératoire si votre TMI est inférieur à 15%.",
+    "Surveillez votre seuil de franchise TVA (37 500 €, majoré 41 250 €) : au-delà du seuil majoré, la TVA s'applique dès le jour du dépassement.",
+    "Comparez le versement libératoire (2,2 % du CA) au barème : il n'est intéressant que si vous êtes imposable.",
     "Consultez un expert-comptable dès 40 000 €/an pour optimiser votre structure.",
   ],
   bnc: [
-    "Optez pour le prélèvement libératoire si votre TMI est inférieur à 15% : vous payez un taux fixe (2,2%) plutôt que le barème progressif.",
+    "Comparez le versement libératoire (2,2 % du CA) au barème progressif : il n'est intéressant que si vous êtes imposable.",
     "Provisionnez 28-32% de chaque encaissement pour vos charges sociales et fiscales afin d'éviter les mauvaises surprises.",
     "Déclarez à l'URSSAF mensuellement si votre CA est irrégulier — cela lisse vos paiements.",
-    "Surveillez votre seuil TVA annuel (37 500 €) : le dépassement vous oblige à facturer la TVA dès le 1er jour du mois concerné.",
+    "Surveillez votre seuil de franchise TVA (37 500 €, majoré 41 250 €) : au-delà du seuil majoré, la TVA s'applique dès le jour du dépassement.",
     "Consultez un expert-comptable dès 40 000 €/an : les économies réalisées couvrent largement ses honoraires.",
   ],
   bic_services: [
-    "Vérifiez votre éligibilité au prélèvement libératoire (RFR N-2 ≤ 28 797 € par part en 2026).",
+    "Vérifiez votre éligibilité au versement libératoire (revenu fiscal de référence N-2 inférieur ou égal à 28 797 € par part pour 2026).",
     "L'abattement forfaitaire de 50% signifie que seule la moitié de votre CA est imposable à l'IR.",
     "Franchise TVA jusqu'à 37 500 €/an — mentionnez 'TVA non applicable - art. 293 B CGI' sur vos factures.",
     "Au-delà de 50 000 €/an, comparez sérieusement avec la SASU : les charges peuvent être inférieures.",
-    "Pensez à l'ACRE si vous créez ou venez de créer votre activité : -50% sur les cotisations la 1ère année.",
+    "ACRE : réduction de cotisations en début d'activité (50 % pour une création avant le 1er juillet 2026, 25 % depuis), sous conditions.",
   ],
   bic_vente: [
     "L'abattement de 71% est votre principal avantage fiscal : seuls 29% de votre CA sont imposables à l'IR.",
     "Taux de cotisations le plus bas du régime (12,3%) — provisionnez 15-18% de votre CA.",
     "Franchise TVA jusqu'à 85 000 €/an pour la vente — bien au-dessus des services.",
     "Anticipez la CFE dès la 2e année d'activité (environ 200€/an, variable selon la commune).",
-    "Le seuil micro-BIC vente est à 188 700 €/an — au-delà vous basculez au régime réel.",
+    "Le plafond micro-BIC vente est de 203 100 €/an depuis 2026 — au-delà, deux années de suite, vous basculez au régime réel.",
   ],
 };
 
@@ -63,30 +62,30 @@ const planAction: Record<Secteur, string[]> = {
   bnc_cipav: [
     "📅 Déclarez votre CA URSSAF avant le 31 janvier (trimestriel) ou mensuellement",
     "💰 Ouvrez un compte bancaire dédié et provisionnez 32% de chaque encaissement",
-    "📄 E-facturation obligatoire à partir de 2027 pour les factures B2B",
+    "Choisissez une plateforme agréée : réception des factures électroniques obligatoire depuis septembre 2026, émission en septembre 2027",
     "📊 Vérifiez votre relevé de points CIPAV chaque année sur cipav.fr",
-    "🔍 Vérifiez si l'ACRE vous est applicable à la création — cotisations −50% la 1ère année",
+    "Vérifiez si l'ACRE vous est applicable à la création (réduction de 25 % depuis le 1er juillet 2026)",
   ],
   bnc: [
     "📅 Déclarez votre CA URSSAF avant le 31 janvier (trimestriel) ou le 31 de chaque mois (mensuel)",
     "💰 Ouvrez un compte bancaire dédié à votre activité pour suivre facilement vos flux",
-    "📄 À partir de 2027, émettez vos factures en e-facturation (format structuré via PDP agréée)",
+    "Choisissez une plateforme agréée : réception des factures électroniques obligatoire depuis septembre 2026, émission en septembre 2027",
     "📊 Réévaluez votre option fiscale (PL vs barème) chaque année en octobre avant la date limite",
     "🔍 Vérifiez si l'ACRE vous est applicable — demande à faire dès la création",
   ],
   bic_services: [
     "📅 Déclarez votre CA URSSAF avant le 31 janvier ou mensuellement pour plus de régularité",
     "💰 Provisionnez 25% de chaque facture sur un compte séparé pour les charges",
-    "📄 E-facturation obligatoire à partir de 2027 pour les factures B2B",
+    "Choisissez une plateforme agréée : réception des factures électroniques obligatoire depuis septembre 2026, émission en septembre 2027",
     "📊 Comparez régime AE vs SASU chaque année si votre CA dépasse 40 000 €",
-    "🔍 Vérifiez les plafonds de CA chaque année (BIC services : 77 700 €/an)",
+    "Vérifiez les plafonds de CA chaque année (BIC services : 83 600 €/an depuis 2026)",
   ],
   bic_vente: [
     "📅 Déclarez votre CA URSSAF avant la date limite (mensuel ou trimestriel)",
     "💰 Tenez un registre des achats et des recettes — obligatoire en BIC vente",
-    "📄 E-facturation obligatoire à partir de 2027 pour les factures inter-entreprises",
+    "Choisissez une plateforme agréée : réception des factures électroniques obligatoire depuis septembre 2026, émission en septembre 2027",
     "📊 Surveillez le seuil TVA de 85 000 € : dépassement = obligations TVA immédiates",
-    "🔍 Au-delà de 80 000 €/an, étudiez le passage au régime réel simplifié",
+    "Au-delà de 85 000 €/an, vous devenez redevable de la TVA : anticipez la facturation et les déclarations",
   ],
 };
 
@@ -142,11 +141,31 @@ function pied(doc: jsPDF, page: number, total: number) {
 
 // ─── Constructeur PDF ────────────────────────────────────────────────────────
 
-function buildPDF(data: PendingPDF) {
+/** Remplace les caractères absents de la police Helvetica intégrée au PDF. */
+function nettoyerTexte(texte: string): string {
+  return texte
+    .replace(/[\u00A0\u202F\u2009]/g, ' ')
+    .replace(/\u2212/g, '-')
+    .replace(/≤/g, '<=')
+    .replace(/→/g, '->')
+    .replace(/[✓✔]/g, '-')
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2B50}]/gu, '')
+    .replace(/ {2,}/g, ' ')
+    .trimStart();
+}
+
+async function buildPDF(data: PendingPDF) {
+  // jsPDF (~170 Ko compressés) n'est téléchargé qu'au moment de générer le rapport
+  const { jsPDF: JsPDF } = await import('jspdf');
   const { resultats, comparatif, secteur } = data;
   const annee: AnneeFiscale = (resultats.annee ?? 2026) as AnneeFiscale;
   const taux = TAUX_PAR_ANNEE[annee];
-  const doc = new jsPDF();
+  const doc = new JsPDF();
+  const ecrireTexte = doc.text.bind(doc) as (...args: unknown[]) => jsPDF;
+  const decouper = doc.splitTextToSize.bind(doc);
+  doc.splitTextToSize = ((texte: string, largeur: number) => decouper(nettoyerTexte(texte), largeur)) as typeof doc.splitTextToSize;
+  doc.text = ((texte: string | string[], ...reste: unknown[]) =>
+    ecrireTexte(Array.isArray(texte) ? texte.map(nettoyerTexte) : nettoyerTexte(texte), ...reste)) as typeof doc.text;
   const date = new Date().toLocaleDateString('fr-FR');
   const fmt = (n: number) => n.toLocaleString('fr-FR') + ' €';
   const PAGES = 6;
@@ -204,7 +223,7 @@ function buildPDF(data: PendingPDF) {
   y += 10;
 
   ligneTableau(doc, y, 'Chiffre d\'affaires brut', fmt(resultats.cabrut), undefined, false); y += 12;
-  ligneTableau(doc, y, `Cotisations URSSAF (${(taux.cotisations[secteur] * 100).toFixed(1)}%)`, `− ${fmt(resultats.cotisationsURSSAF)}`, [230, 57, 70], true); y += 12;
+  ligneTableau(doc, y, `Cotisations URSSAF (${formatTaux(taux.cotisations[secteur])}${resultats.acreApplique ? ', ACRE déduite' : ''} + formation)`, `− ${fmt(resultats.cotisationsURSSAF)}`, [230, 57, 70], true); y += 12;
   ligneTableau(doc, y, 'Impôt sur le revenu (estimé)', `− ${fmt(resultats.impotEstime)}`, [255, 159, 28], false); y += 12;
   ligneTableau(doc, y, 'CFE (lissée sur 12 mois)', `− ${fmt(resultats.cfeEstimee)}`, [108, 117, 125], true); y += 14;
 
@@ -268,13 +287,15 @@ function buildPDF(data: PendingPDF) {
   y += 8;
 
   const lignes = [
-    ['Revenu net/mois', fmt(comparatif.ae.revenuNet), fmt(comparatif.sasu.revenuNet), fmt(comparatif.portage.revenuNet)],
-    ['Charges/mois', fmt(comparatif.ae.cotisationsURSSAF), fmt(comparatif.sasu.charges), fmt(comparatif.portage.fraisPortage)],
-    ['Revenu net/an', fmt(comparatif.ae.revenuNet * 12), fmt(comparatif.sasu.revenuNet * 12), fmt(comparatif.portage.revenuNet * 12)],
-    ['Complexité', '⭐ Très simple', '⭐⭐⭐ Élevée', '⭐⭐ Moyenne'],
+    ['Net après impôt/mois', fmt(comparatif.ae.revenuNet), fmt(comparatif.sasu.revenuNet), fmt(comparatif.portage.revenuNet)],
+    ['Cotisations sociales/mois', fmt(comparatif.ae.cotisationsURSSAF), fmt(comparatif.sasu.charges), fmt(comparatif.portage.charges)],
+    ['Frais de structure/mois', fmt(comparatif.ae.cfeEstimee), fmt(comparatif.sasu.fraisFixes), fmt(comparatif.portage.fraisPortage)],
+    ['Impôt sur le revenu/mois', fmt(comparatif.ae.impotEstime), fmt(comparatif.sasu.impot), fmt(comparatif.portage.impot)],
+    ['Net après impôt/an', fmt(comparatif.ae.revenuNet * 12), fmt(comparatif.sasu.revenuNet * 12), fmt(comparatif.portage.revenuNet * 12)],
+    ['Complexité', 'Très simple', 'Élevée', 'Moyenne'],
     ['Protection sociale', 'Basique (SSI)', 'Assimilé salarié', 'Salarié régime gén.'],
     ['Comptable obligatoire', 'Non', 'Oui (~2-4k€/an)', 'Non'],
-    ['Plafond CA', '77-189k€/an', 'Illimité', 'Variable'],
+    ['Plafond CA', fmt(taux.plafonds_ca[secteur]) + '/an', 'Illimité', 'Selon société'],
   ];
 
   lignes.forEach((row, ri) => {
@@ -336,8 +357,8 @@ function buildPDF(data: PendingPDF) {
   const seuilsData = [
     ['Plafond CA (votre secteur)', fmt(seuilsTaux.plafonds_ca[secteur]) + '/an', 'Dépassement = sortie du régime micro'],
     ['Franchise TVA', fmt(seuilsTaux.seuils_tva[secteur]) + '/an', 'Dépassement = TVA obligatoire'],
-    ['E-facturation B2B', '2027', 'Obligation légale pour les AE'],
-    ['Plafond RFR prélèv. lib.', fmt(seuilsTaux.plafond_rfr_pl) + '/part', 'Au-delà = inéligible au PL'],
+    ['Facture électronique', 'Sept. 2027', 'Émission obligatoire (réception : sept. 2026)'],
+    ['Plafond RFR versement lib.', fmt(seuilsTaux.plafond_rfr_pl) + '/part', 'Au-delà = option impossible'],
   ];
 
   seuilsData.forEach((row, i) => {
@@ -403,7 +424,7 @@ function buildPDF(data: PendingPDF) {
 
   // ── PAGE 6 : E-facturation ───────────────────────────────────────────────
   doc.addPage();
-  headerBande(doc, 'E-facturation : ce qui vous attend en 2027', 'Réforme obligatoire pour tous les auto-entrepreneurs en B2B');
+  headerBande(doc, 'Facturation électronique : où en êtes-vous ?', 'Réforme obligatoire pour toutes les entreprises, micro-entrepreneurs compris');
 
   y = 36;
 
@@ -414,15 +435,15 @@ function buildPDF(data: PendingPDF) {
     },
     {
       titre: 'Calendrier de déploiement',
-      texte: "• 2026 : Grandes entreprises et ETI obligées d'émettre des e-factures\n• 2027 : PME et micro-entreprises (dont auto-entrepreneurs) — obligation d'émettre ET de recevoir\n• Toutes les entreprises françaises soumises à TVA sont concernées pour les transactions B2B.",
+      texte: "• 1er septembre 2026 : toutes les entreprises, micro-entrepreneurs compris, doivent pouvoir RECEVOIR des factures électroniques ; les grandes entreprises et ETI doivent en émettre\n• 1er septembre 2027 : les PME et micro-entreprises doivent à leur tour ÉMETTRE leurs factures au format électronique\n• Sont concernées les opérations entre entreprises établies en France (B2B), y compris en franchise de TVA.",
     },
     {
       titre: 'Ce que vous devrez faire en tant qu\'auto-entrepreneur',
-      texte: "1. S'inscrire sur une Plateforme de Dématérialisation Partenaire (PDP) agréée (liste publiée par la DGFiP)\n2. Émettre vos factures via cette plateforme dans un format structuré\n3. Recevoir les factures de vos fournisseurs par le même canal\n4. Le Portail Public de Facturation (Chorus Pro / PPF) sera accessible gratuitement comme alternative",
+      texte: "1. Choisir une plateforme agréée (PA, ex-PDP) dans la liste publiée sur impots.gouv.fr — plusieurs proposent une offre gratuite\n2. Recevoir les factures de vos fournisseurs par cette plateforme (obligatoire depuis septembre 2026)\n3. Émettre vos factures via cette plateforme dans un format structuré, au plus tard en septembre 2027\n4. Le portail public ne propose plus de service de facturation gratuit : il sert d'annuaire et transmet les données à l'administration",
     },
     {
       titre: 'Ce qui NE change PAS',
-      texte: "• Les factures aux particuliers (B2C) ne sont PAS concernées par l'e-facturation obligatoire\n• Les mentions légales obligatoires sur vos factures restent identiques\n• La franchise TVA et les taux de cotisations ne sont pas modifiés par cette réforme",
+      texte: "• Les ventes aux particuliers (B2C) ne donnent pas lieu à facture électronique, mais leurs données devront être transmises (e-reporting)\n• Les mentions légales obligatoires sur vos factures restent identiques\n• La franchise TVA et les taux de cotisations ne sont pas modifiés par cette réforme",
     },
     {
       titre: 'Avantages pour vous',
@@ -448,96 +469,183 @@ function buildPDF(data: PendingPDF) {
 
   pied(doc, 6, PAGES);
 
-  doc.save(`rapport-combienjeGarde-${date.replace(/\//g, '-')}.pdf`);
+  doc.save(`rapport-combienjegarde-${date.replace(/\//g, '-')}.pdf`);
 }
 
 // ─── Composant ───────────────────────────────────────────────────────────────
 
-export default function PDFExportButton({ resultats, comparatif, secteur }: Props) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [autoDownloaded, setAutoDownloaded] = useState(false);
+type EtatRetour = 'aucun' | 'verification' | 'telecharge' | 'echec';
+
+async function paiementConfirme(sessionId: string): Promise<boolean> {
+  try {
+    const reponse = await fetch(`/api/verify-payment?session_id=${encodeURIComponent(sessionId)}`);
+    if (!reponse.ok) return false;
+    const corps: { paid?: boolean } = await reponse.json();
+    return corps.paid === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Au retour de Stripe (?pdf=success&session_id=…), vérifie le paiement côté
+ * serveur puis génère le rapport de la simulation mise de côté avant le départ.
+ */
+function useRetourPaiement(): EtatRetour {
+  const [etat, setEtat] = useState<EtatRetour>('aucun');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('pdf') !== 'success' || autoDownloaded) return;
+    if (params.get('pdf') !== 'success') return;
 
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-
+    const sessionId = params.get('session_id') ?? '';
+    let raw: string | null = null;
     try {
-      const pending: PendingPDF = JSON.parse(raw);
-      buildPDF(pending);
-      localStorage.removeItem(STORAGE_KEY);
-      setAutoDownloaded(true);
-      window.history.replaceState({}, '', window.location.pathname);
+      raw = localStorage.getItem(STORAGE_KEY);
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      raw = null;
     }
-  }, [autoDownloaded]);
+    window.history.replaceState({}, '', window.location.pathname);
+    if (!raw || !sessionId) return;
 
-  const isStripeConfigured = STRIPE_PAYMENT_LINK !== 'https://buy.stripe.com/test_fZubJ15rA9kmc9Aa7f9R600';
+    let annule = false;
+    setEtat('verification');
+
+    (async () => {
+      const confirme = await paiementConfirme(sessionId);
+      if (annule) return;
+      if (!confirme) {
+        setEtat('echec');
+        return;
+      }
+      try {
+        await buildPDF(JSON.parse(raw) as PendingPDF);
+        localStorage.removeItem(STORAGE_KEY);
+        setEtat('telecharge');
+      } catch {
+        setEtat('echec');
+      }
+    })();
+
+    return () => {
+      annule = true;
+    };
+  }, []);
+
+  return etat;
+}
+
+export default function PDFExportButton({ resultats, comparatif, secteur }: Props) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const etatRetour = useRetourPaiement();
+  const boutonOuvrirRef = useRef<HTMLButtonElement>(null);
+  const boutonPayerRef = useRef<HTMLButtonElement>(null);
+
+  // Fenêtre modale : focus à l'ouverture, fermeture avec Échap, focus rendu à la fermeture
+  useEffect(() => {
+    if (!modalOpen) return;
+    const declencheur = boutonOuvrirRef.current;
+    boutonPayerRef.current?.focus();
+    const surTouche = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setModalOpen(false);
+    };
+    document.addEventListener('keydown', surTouche);
+    return () => {
+      document.removeEventListener('keydown', surTouche);
+      declencheur?.focus();
+    };
+  }, [modalOpen]);
 
   const handlePay = () => {
-    if (!isStripeConfigured) {
-      alert('Paiement non disponible pour le moment. Revenez bientôt !');
+    const pending: PendingPDF = { resultats, comparatif, secteur };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
+    } catch {
+      // Stockage indisponible (navigation privée) : le rapport ne pourra pas être généré au retour
       return;
     }
-    const pending: PendingPDF = { resultats, comparatif, secteur };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
     window.location.href = STRIPE_PAYMENT_LINK;
   };
 
-  return (
-    <>
-      <button
-        onClick={() => setModalOpen(true)}
-        className="w-full font-titre font-bold text-white rounded-xl px-8 py-4 transition-all duration-200 hover:-translate-y-0.5"
-        style={{ background: '#FF6B35', fontSize: '18px', boxShadow: '0 4px 16px rgba(255, 107, 53, 0.3)' }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = '#E85A25')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = '#FF6B35')}
-      >
-        📄 Télécharger mon rapport complet — 4,90 €
-      </button>
+  const messageRetour = {
+    aucun: null,
+    verification: { texte: 'Vérification de votre paiement…', couleur: '#6C757D' },
+    telecharge: { texte: '✅ Paiement confirmé — votre rapport a été téléchargé.', couleur: '#1A9E92' },
+    echec: { texte: `Le paiement n'a pas pu être vérifié. Si vous avez été débité, écrivez à ${CONTACT_EMAIL}.`, couleur: '#B02A37' },
+  }[etatRetour];
 
-      {autoDownloaded && (
-        <p className="text-center font-corps text-sm text-vert-menthe mt-2">
-          ✅ Paiement confirmé — votre rapport a été téléchargé.
+  // Tant que la vente n'est pas configurée (lien Stripe + identité de l'éditeur), rien n'est proposé
+  if (!PAIEMENT_ACTIF && !messageRetour) return null;
+
+  return (
+    <div>
+      {PAIEMENT_ACTIF && (
+        <button
+          ref={boutonOuvrirRef}
+          type="button"
+          onClick={() => setModalOpen(true)}
+          className="w-full font-titre font-bold text-white rounded-xl px-8 py-4 transition-all duration-200 hover:-translate-y-0.5 bg-orange-hover"
+          style={{ fontSize: '18px', boxShadow: '0 4px 16px rgba(255, 107, 53, 0.3)' }}
+        >
+          📄 Télécharger mon rapport complet — {PRIX_PDF}
+        </button>
+      )}
+
+      {messageRetour && (
+        <p role="status" className="text-center font-corps text-sm mt-2" style={{ color: messageRetour.couleur }}>
+          {messageRetour.texte}
         </p>
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
-          <div className="bg-white rounded-card-lg p-8 max-w-md w-full shadow-xl animate-fadeInUp">
-            <h3 className="font-titre font-bold text-xl text-bleu-marine mb-1">Rapport PDF — 6 pages</h3>
-            <p className="font-corps text-xs text-gris-moyen mb-5">Personnalisé pour votre profil · Taux {resultats.annee ?? 2026}</p>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.5)' }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setModalOpen(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titre-modale-pdf"
+            className="bg-white rounded-card-lg p-8 max-w-md w-full shadow-xl animate-fadeInUp"
+          >
+            <h3 id="titre-modale-pdf" className="font-titre font-bold text-xl text-bleu-marine mb-1">Rapport PDF — 6 pages</h3>
+            <p className="font-corps text-xs text-gris-moyen mb-5">Personnalisé pour votre profil · Taux {resultats.annee}</p>
             <ul className="font-corps text-sm text-gris-fonce mb-6 space-y-2">
-              <li>📊 <strong>Page 1–2 :</strong> Couverture + détail mensuel & annuel</li>
-              <li>⚖️ <strong>Page 3 :</strong> Comparatif AE / SASU / Portage avec chiffres</li>
-              <li>📅 <strong>Page 4 :</strong> Calendrier fiscal {resultats.annee ?? 2026} + seuils à surveiller</li>
+              <li>📊 <strong>Pages 1–2 :</strong> couverture + détail mensuel et annuel</li>
+              <li>⚖️ <strong>Page 3 :</strong> comparatif AE / SASU / portage chiffré</li>
+              <li>📅 <strong>Page 4 :</strong> calendrier fiscal {resultats.annee} + seuils à surveiller</li>
               <li>💡 <strong>Page 5 :</strong> 5 conseils fiscaux + plan d'action en 5 étapes</li>
-              <li>🧾 <strong>Page 6 :</strong> Guide e-facturation 2027 pour auto-entrepreneur</li>
+              <li>🧾 <strong>Page 6 :</strong> guide de la facturation électronique</li>
             </ul>
             <div className="flex gap-3">
               <button
+                ref={boutonPayerRef}
+                type="button"
                 onClick={handlePay}
-                className="flex-1 font-titre font-bold text-white rounded-xl py-3 transition-all hover:opacity-90"
-                style={{ background: isStripeConfigured ? '#FF6B35' : '#9CA3AF' }}
+                className="flex-1 font-titre font-bold text-white rounded-xl py-3 transition-all hover:opacity-90 bg-orange-hover"
               >
-                {isStripeConfigured ? 'Payer 4,90 € →' : 'Bientôt disponible'}
+                Payer {PRIX_PDF} →
               </button>
               <button
+                type="button"
                 onClick={() => setModalOpen(false)}
                 className="px-4 py-3 rounded-xl border border-gris-clair font-corps text-sm text-gris-moyen hover:border-bleu-marine transition-colors"
               >
                 Annuler
               </button>
             </div>
-            <p className="mt-3 text-center font-corps text-xs text-gris-moyen">
-              Paiement sécurisé Stripe · PDF généré et téléchargé automatiquement au retour
+            <p className="mt-3 text-center font-corps text-xs text-gris-moyen leading-relaxed">
+              Paiement sécurisé par Stripe · PDF généré et téléchargé au retour sur le site.
+              <br />
+              Contenu numérique fourni immédiatement : en payant, vous acceptez les{' '}
+              <Link to="/cgv" className="underline">conditions générales de vente</Link> et renoncez à votre droit de rétractation.
             </p>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

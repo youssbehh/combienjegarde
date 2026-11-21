@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ANNEE_COURANTE } from '../../lib/constants';
+import { PAIEMENT_ACTIF } from '../../lib/site';
 
 export default function Footer() {
   return (
@@ -10,7 +12,7 @@ export default function Footer() {
             CombienJeGarde<span className="text-vert-menthe">.fr</span>
           </p>
           <p className="font-corps text-sm text-blue-200 leading-relaxed mb-4">
-            Le simulateur de revenu net pour auto-entrepreneurs français. Simple, rapide, basé sur les taux officiels 2026.
+            Le simulateur de revenu net pour auto-entrepreneurs français. Simple, rapide, basé sur les taux officiels {ANNEE_COURANTE}.
           </p>
           <p className="font-corps text-xs text-blue-300">
             Outil d'estimation — non contractuel. Consultez un expert-comptable pour votre situation personnelle.
@@ -31,11 +33,11 @@ export default function Footer() {
 
         {/* Col 3 */}
         <div>
-          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">E-facturation & 2026</h3>
+          <h3 className="font-titre font-semibold text-sm uppercase tracking-wider mb-4 text-blue-200">Guides</h3>
           <ul className="flex flex-col gap-2">
             <li>
               <Link to="/guide/solutions-e-facturation-auto-entrepreneur-gratuit" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors flex items-center gap-1.5">
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FF6B35' }}>Nouveau</span>
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,107,53,0.25)', color: '#FFB08F' }}>Nouveau</span>
                 Logiciels e-facturation gratuits
               </Link>
             </li>
@@ -57,6 +59,7 @@ export default function Footer() {
                 Changements auto-entrepreneur 2026
               </Link>
             </li>
+            <li><Link to="/guide" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">Tous les guides et l'actualité</Link></li>
           </ul>
         </div>
 
@@ -75,8 +78,8 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="https://www.service-public.fr" target="_blank" rel="noopener noreferrer" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">
-                service-public.fr
+              <a href="https://entreprendre.service-public.gouv.fr" target="_blank" rel="noopener noreferrer" className="font-corps text-sm text-blue-100 hover:text-vert-menthe transition-colors">
+                service-public.gouv.fr
               </a>
             </li>
             <li>
@@ -91,10 +94,13 @@ export default function Footer() {
       <div className="border-t border-blue-800">
         <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-2">
           <p className="font-corps text-xs text-blue-300">
-            © 2026 CombienJeGarde.fr — Données basées sur les taux officiels 2025 & 2026, à titre indicatif uniquement.
+            © {new Date().getFullYear()} CombienJeGarde — Données basées sur les taux officiels 2025 et {ANNEE_COURANTE}, à titre indicatif uniquement.
           </p>
           <div className="flex gap-4">
-            <Link to="/mentions-legales" className="font-corps text-xs text-blue-300 hover:text-white transition-colors">Mentions légales</Link>
+            <Link to="/mentions-legales" className="font-corps text-xs text-blue-200 hover:text-white transition-colors">Mentions légales</Link>
+            {PAIEMENT_ACTIF && (
+              <Link to="/cgv" className="font-corps text-xs text-blue-200 hover:text-white transition-colors">CGV</Link>
+            )}
           </div>
         </div>
       </div>

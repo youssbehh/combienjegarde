@@ -1,75 +1,32 @@
-import { useEffect } from 'react';
-import SEOHead from '../components/layout/SEOHead';
-import { useSimulateurStore } from '../store/simulateurStore';
-import StepFiscal from '../components/simulateur/StepFiscal';
-import ResultCard from '../components/simulateur/ResultCard';
-import DonutChart from '../components/simulateur/DonutChart';
-import ComparateurRegimes from '../components/simulateur/ComparateurRegimes';
-import PDFExportButton from '../components/simulateur/PDFExportButton';
-import StepSecteur from '../components/simulateur/StepSecteur';
+import SimulateurSecteurPage from '../components/simulateur/SimulateurSecteurPage';
+import { ANNEE_COURANTE, TAUX_PAR_ANNEE, formatTaux } from '../lib/constants';
+
+const taux = TAUX_PAR_ANNEE[ANNEE_COURANTE];
+const tauxServices = formatTaux(taux.cotisations.bic_services);
+const plafond = taux.plafonds_ca.bic_services.toLocaleString('fr-FR');
+const seuilTVA = taux.seuils_tva.bic_services.toLocaleString('fr-FR');
 
 const faq = [
-  { question: 'Quel est le taux de cotisations en BIC Services en 2026 ?', answer: 'En 2026, le taux est de 21,2% du CA pour les prestations de services commerciales (BIC Services), inchangé par rapport à 2025.' },
-  { question: 'Quelle est la différence entre BIC Services et BNC ?', answer: 'Le BIC Services concerne les activités commerciales de services (agence, conseil commercial, formation). Le BNC concerne les professions libérales et intellectuelles (freelances, médecins, avocats…).' },
-  { question: 'Quel abattement forfaitaire en BIC Services ?', answer: '50% d\'abattement forfaitaire. Vous êtes imposé sur 50% de votre CA annuel.' },
-  { question: 'Quel est le plafond de CA en BIC Services 2026 ?', answer: 'Le plafond de CA annuel est de 77 700 € pour rester auto-entrepreneur en BIC Services. La franchise TVA commence à 37 500 €.' },
+  { question: `Quel est le taux de cotisations en BIC Services en ${ANNEE_COURANTE} ?`, answer: `En ${ANNEE_COURANTE}, le taux est de ${tauxServices} du chiffre d'affaires pour les prestations de services commerciales et artisanales, inchangé par rapport à 2025. S'y ajoute la contribution à la formation professionnelle (0,1 % pour les commerçants, 0,3 % pour les artisans).` },
+  { question: 'Quelle est la différence entre BIC Services et BNC ?', answer: 'Le BIC Services concerne les prestations commerciales ou artisanales (agence, services à la personne, travaux…). Le BNC concerne les professions libérales et intellectuelles (freelances, consultants, professions de santé…).' },
+  { question: 'Quel abattement forfaitaire en BIC Services ?', answer: "L'abattement forfaitaire est de 50 % : vous êtes imposé sur la moitié de votre chiffre d'affaires annuel." },
+  { question: `Quel est le plafond de chiffre d'affaires en BIC Services en ${ANNEE_COURANTE} ?`, answer: `Le plafond annuel est de ${plafond} € en ${ANNEE_COURANTE} (77 700 € jusqu'en 2025). La franchise de TVA s'applique jusqu'à ${seuilTVA} €.` },
 ];
 
 export default function SimulateurBICServices() {
-  const { setSecteur, step, resultats, comparatif, ca, secteur, reset, recommencer, setStep } = useSimulateurStore();
-
-  useEffect(() => {
-    setSecteur('bic_services');
-    setStep(1);
-  }, [setSecteur, setStep]);
-
   return (
-    <>
-      <SEOHead
-        title="Simulateur revenu net BIC Services 2026 — Conseil, formation, agence"
-        description="Calculez votre revenu net en BIC Services (prestations) après cotisations URSSAF (21,2%) et impôts. Taux officiels 2026, résultat immédiat."
-        canonical="/simulateur-bic-services"
-        faqItems={faq}
-      />
-
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="mb-10">
-          <h1 className="font-titre font-extrabold text-bleu-marine text-3xl mb-4">
-            Simulateur de revenu net BIC Services 2026
-          </h1>
-          <p className="font-corps text-gris-moyen leading-relaxed max-w-2xl">
-            Activité de conseil, formation, agence ou autre prestation de service commerciale ? En BIC Services, les cotisations sont de <strong>21,2%</strong> (inchangé en 2026) et l'abattement forfaitaire de <strong>50%</strong>.
-          </p>
-        </div>
-
-        <div className="bg-white rounded-card shadow-card p-8 mb-12">
-          {step === 1 && <StepSecteur />}
-          {step === 2 && <StepFiscal />}
-          {step === 3 && resultats && comparatif && (
-            <div className="flex flex-col gap-8">
-              <ResultCard resultats={resultats} onRecommencer={recommencer} onReset={reset} />
-              <DonutChart resultats={resultats} />
-              <ComparateurRegimes comparatif={comparatif} caAnnuel={ca * 12} />
-              <PDFExportButton resultats={resultats} comparatif={comparatif} secteur={secteur} />
-            </div>
-          )}
-        </div>
-
-        <section>
-          <h2 className="font-titre font-bold text-bleu-marine text-2xl mb-6">Questions fréquentes</h2>
-          <div className="flex flex-col gap-3">
-            {faq.map((item) => (
-              <details key={item.question} className="bg-white rounded-card shadow-card group">
-                <summary className="p-5 font-titre font-semibold text-bleu-marine cursor-pointer list-none flex justify-between items-center">
-                  {item.question}
-                  <span className="text-vert-menthe font-bold group-open:rotate-45 transition-transform">+</span>
-                </summary>
-                <p className="px-5 pb-5 font-corps text-sm text-gris-fonce leading-relaxed">{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      </div>
-    </>
+    <SimulateurSecteurPage
+      secteur="bic_services"
+      canonical="/simulateur-bic-services"
+      seoTitle={`Simulateur revenu net BIC Services ${ANNEE_COURANTE} — Prestations commerciales et artisanales`}
+      seoDescription={`Calculez votre revenu net en BIC Services (prestations) après cotisations URSSAF (${tauxServices}) et impôts. Taux officiels ${ANNEE_COURANTE}, résultat immédiat.`}
+      h1={`Simulateur de revenu net BIC Services ${ANNEE_COURANTE}`}
+      intro={
+        <>
+          Prestation de service commerciale ou artisanale ? En BIC Services, les cotisations sont de <strong>{tauxServices}</strong> (inchangé en {ANNEE_COURANTE}) et l'abattement forfaitaire de <strong>50 %</strong>.
+        </>
+      }
+      faq={faq}
+    />
   );
 }

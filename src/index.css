@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap');
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
 
 @tailwind base;
 @tailwind components;
@@ -18,8 +20,8 @@
   --rouge-charges: #E63946;
   --jaune-impot:   #FF9F1C;
   --blanc-pur:     #FFFFFF;
-  --font-titre:    'Plus Jakarta Sans', sans-serif;
-  --font-corps:    'DM Sans', sans-serif;
+  --font-titre:    'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-corps:    'DM Sans', system-ui, sans-serif;
 }
 
 * {
@@ -58,4 +60,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .countup-transition {
   transition: all 300ms ease-out;
+}
+
+/* Contour de focus visible au clavier sur tous les éléments interactifs */
+:focus-visible {
+  outline: 3px solid var(--vert-menthe);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

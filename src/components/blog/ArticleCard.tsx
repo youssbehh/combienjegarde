@@ -28,14 +28,14 @@ export default function ArticleCard({ slug, title, description, readingTime, dat
         )}
         <span className="font-corps text-xs text-gris-moyen">⏱️ {readingTime} min</span>
         <span className="font-corps text-xs text-gris-moyen">
-          {new Date(dateModified).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+          {new Date(`${dateModified}T12:00:00`).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
         </span>
       </div>
       <h3 className="font-titre font-bold text-bleu-marine group-hover:text-bleu-moyen transition-colors mb-2 text-lg leading-snug">
         {title}
       </h3>
       <p className="font-corps text-sm text-gris-moyen leading-relaxed line-clamp-2">{description}</p>
-      <span className="mt-4 inline-block font-corps text-sm text-vert-menthe font-medium">
+      <span className="mt-4 inline-block font-corps text-sm text-vert-fonce font-medium">
         Lire l'article →
       </span>
     </Link>

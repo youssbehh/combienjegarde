@@ -17,8 +17,8 @@ export default {
         'jaune-impot':   '#FF9F1C',
       },
       fontFamily: {
-        titre: ['Plus Jakarta Sans', 'sans-serif'],
-        corps: ['DM Sans', 'sans-serif'],
+        titre: ['Plus Jakarta Sans Variable', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        corps: ['DM Sans', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         card: '16px',
